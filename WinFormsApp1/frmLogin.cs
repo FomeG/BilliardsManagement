@@ -1,14 +1,20 @@
 using System.Drawing.Drawing2D;
+using Models.HandleData;
+using Models.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace WinFormsApp1
 {
-    public partial class Form1 : Form
+    public partial class frmLogin : Form
     {
-        public Form1()
+        public frmLogin()
         {
             InitializeComponent();
             SetupForm();
+            NhoDangNhap();
         }
+
+        #region Code giao diện
 
         private void SetupForm()
         {
@@ -150,7 +156,6 @@ namespace WinFormsApp1
 
         private void SetupPlaceholderText()
         {
-            // Placeholder cho username
             if (string.IsNullOrEmpty(taikhoan.Text))
             {
                 taikhoan.ForeColor = Color.Gray;
@@ -175,7 +180,6 @@ namespace WinFormsApp1
                 }
             };
 
-            // Placeholder cho password
             matkhau.Enter += (sender, e) =>
             {
                 if (matkhau.Text == "")
@@ -185,6 +189,10 @@ namespace WinFormsApp1
             };
         }
 
+        #endregion
+
+        #region Event Handlers
+
         private void Form1_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -193,20 +201,79 @@ namespace WinFormsApp1
             }
         }
 
-        private void Button1_Click(object sender, EventArgs e)
+        private async void Button1_Click(object sender, EventArgs e)
         {
             string username = taikhoan.Text.Trim();
             string password = matkhau.Text.Trim();
 
-            // Kiểm tra placeholder text
             if (username == "Nhập tên đăng nhập..." || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // TODO: Thêm logic xử lý đăng nhập ở đây
-            MessageBox.Show("Chức năng đăng nhập chưa được triển khai!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Hiển thị loading
+            button1.Enabled = false;
+            button1.Text = "Đang đăng nhập...";
+
+            try
+            {
+                using (var context = new DaDBContext())
+                {
+                    // Tìm tài khoản trong database
+                    var user = await context.TaiKhoans
+                        .FirstOrDefaultAsync(t => t.TenDangNhap == username && t.MatKhau == password && t.TrangThai == true);
+
+                    if (user != null)
+                    {
+                        // Lưu thông tin đăng nhập nếu được chọn Remember Me
+                        SaveCredentialsIfRemembered(username);
+
+                        // Đăng nhập thành công - lưu vào session
+                        UserSession.Login(user);
+                        MessageBox.Show($"Đăng nhập thành công! Xin chào {user.HoTen}", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // Mở form chính và ẩn form đăng nhập
+                        frmTrangChu mainForm = new frmTrangChu(user);
+
+                        // Đăng ký sự kiện khi MainForm đóng để hiển thị lại Form1
+                        mainForm.FormClosed += (s, args) =>
+                        {
+                            this.Show();
+                            this.WindowState = FormWindowState.Normal;
+                            this.BringToFront();
+                            // Reset form đăng nhập
+                            matkhau.Clear();
+                            // Chỉ xóa username nếu không ghi nhớ
+                            if (!IsRememberMeChecked())
+                            {
+                                ClearUsernameField();
+                            }
+                            taikhoan.Focus();
+                        };
+
+                        mainForm.Show();
+                        this.Hide();
+                    }
+                    else
+                    {
+                        // Đăng nhập thất bại
+                        MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        matkhau.Clear();
+                        taikhoan.Focus();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi kết nối cơ sở dữ liệu: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Khôi phục trạng thái nút
+                button1.Enabled = true;
+                button1.Text = "Đăng nhập";
+            }
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -214,23 +281,93 @@ namespace WinFormsApp1
 
         }
 
-        private void LoadRememberedCredentials()
-        {
-            // TODO: Thêm logic load thông tin đăng nhập đã lưu ở đây
-            taikhoan.Focus();
-        }
-
-        private void SaveCredentialsIfRemembered(string username)
-        {
-            // TODO: Thêm logic lưu thông tin đăng nhập ở đây
-        }
-
         private void LinkForgotPassword_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            MessageBox.Show("Test",
+            MessageBox.Show("Vui lòng liên hệ quản trị viên để được hỗ trợ đặt lại mật khẩu.",
                            "Quên mật khẩu",
                            MessageBoxButtons.OK,
                            MessageBoxIcon.Information);
         }
+
+        #endregion
+
+        #region Chức năng nhớ tài khoản đăng nhập
+
+        private void NhoDangNhap()
+        {
+            try
+            {
+                // Đọc thông tin đã lưu từ Settings
+                string savedUsername = Properties.Settings.Default.RememberedUsername;
+                bool rememberMe = Properties.Settings.Default.RememberMe;
+
+                if (rememberMe && !string.IsNullOrEmpty(savedUsername))
+                {
+                    // Đặt username đã lưu
+                    taikhoan.Text = savedUsername;
+                    taikhoan.ForeColor = Color.Black;
+
+                    // Đặt checkbox Remember Me (nếu có)
+                    SetRememberMeChecked(true);
+
+                    // Focus vào password field
+                    matkhau.Focus();
+                }
+                else
+                {
+                    // Focus vào username field
+                    taikhoan.Focus();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Nếu có lỗi, chỉ focus vào username
+                taikhoan.Focus();
+            }
+        }
+
+        private void SaveCredentialsIfRemembered(string username)
+        {
+            try
+            {
+                if (IsRememberMeChecked())
+                {
+                    // Lưu thông tin đăng nhập
+                    Properties.Settings.Default.RememberedUsername = username;
+                    Properties.Settings.Default.RememberMe = true;
+                }
+                else
+                {
+                    // Xóa thông tin đã lưu
+                    Properties.Settings.Default.RememberedUsername = "";
+                    Properties.Settings.Default.RememberMe = false;
+                }
+
+                // Lưu settings
+                Properties.Settings.Default.Save();
+            }
+            catch (Exception ex)
+            {
+                // Nếu có lỗi khi lưu, không làm gì cả
+            }
+        }
+
+        private bool IsRememberMeChecked()
+        {
+            return chkRememberMe.Checked;
+        }
+
+        private void SetRememberMeChecked(bool isChecked)
+        {
+            chkRememberMe.Checked = isChecked;
+        }
+
+        private void ClearUsernameField()
+        {
+            taikhoan.Text = "Nhập tên đăng nhập...";
+            taikhoan.ForeColor = Color.Gray;
+        }
+
+        #endregion
     }
 }

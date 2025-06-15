@@ -10,17 +10,11 @@ using System.Windows.Forms;
 
 namespace WinFormsApp1
 {
-    public partial class Form2 : Form
+    public partial class frmNapTien : Form
     {
-        public Form2()
+        public frmNapTien()
         {
             InitializeComponent();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Form3 tunggaming = new Form3();
-            
         }
     }
 }
