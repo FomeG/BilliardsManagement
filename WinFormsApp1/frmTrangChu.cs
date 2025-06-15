@@ -21,6 +21,10 @@ namespace WinFormsApp1
         private Ban? currentSelectedBan; // Lưu thông tin bàn hiện tại được chọn
         private System.Windows.Forms.Timer? phienChoiCheckTimer; // Timer để check phiên chơi hết hạn
 
+        // Lưu trữ nội dung trang chủ để restore lại
+        private List<Control> originalPnHienThiControls = new List<Control>();
+        private Form? currentChildForm; // Form con hiện tại đang hiển thị
+
         public frmTrangChu(TaiKhoan user)
         {
             InitializeComponent();
@@ -31,6 +35,12 @@ namespace WinFormsApp1
 
             // Thiết lập timer cho check phiên chơi hết hạn
             SetupPhienChoiCheckTimer();
+
+            // Thiết lập menu navigation
+            SetupMenuNavigation();
+
+            // Lưu nội dung trang chủ ban đầu
+            SaveOriginalContent();
         }
 
         private void SetupUserInterface()
@@ -1195,5 +1205,101 @@ namespace WinFormsApp1
         {
             LoadDefaultContent();
         }
+
+        #region Menu Navigation
+
+        private void SetupMenuNavigation()
+        {
+            // Thêm event handlers cho các menu items
+            trangChủToolStripMenuItem.Click += TrangChủToolStripMenuItem_Click;
+            đồĂnThứcUốngToolStripMenuItem.Click += ĐồĂnThứcUốngToolStripMenuItem_Click;
+            quảnLýTàiKhoảnToolStripMenuItem.Click += QuảnLýTàiKhoảnToolStripMenuItem_Click;
+            đăngXuấtToolStripMenuItem.Click += ĐăngXuấtToolStripMenuItem_Click;
+        }
+
+        private void SaveOriginalContent()
+        {
+            // Lưu tất cả controls hiện tại trong pnHienThi
+            originalPnHienThiControls.Clear();
+            foreach (Control control in pnHienThi.Controls)
+            {
+                originalPnHienThiControls.Add(control);
+            }
+        }
+
+        private void TrangChủToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowHomePage();
+        }
+
+        private void ĐồĂnThứcUốngToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowSanPhamForm();
+        }
+
+        private void QuảnLýTàiKhoảnToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowQuanLyTaiKhoanForm();
+        }
+
+        private void ĐăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LogOut();
+        }
+
+        private void ShowHomePage()
+        {
+            // Đóng form con hiện tại nếu có
+            if (currentChildForm != null)
+            {
+                currentChildForm.Close();
+                currentChildForm.Dispose();
+                currentChildForm = null;
+            }
+
+            // Xóa tất cả controls trong pnHienThi
+            pnHienThi.Controls.Clear();
+
+            // Restore lại nội dung trang chủ ban đầu
+            foreach (Control control in originalPnHienThiControls)
+            {
+                pnHienThi.Controls.Add(control);
+            }
+        }
+
+        private void ShowSanPhamForm()
+        {
+            ShowChildForm(new frmSanPham(dbContext));
+        }
+
+        private void ShowQuanLyTaiKhoanForm()
+        {
+            ShowChildForm(new frmQuanLyTaiKhoan(dbContext));
+        }
+
+        private void ShowChildForm(Form childForm)
+        {
+            // Đóng form con hiện tại nếu có
+            if (currentChildForm != null)
+            {
+                currentChildForm.Close();
+                currentChildForm.Dispose();
+            }
+
+            // Xóa tất cả controls trong pnHienThi
+            pnHienThi.Controls.Clear();
+
+            // Thiết lập form con
+            currentChildForm = childForm;
+            childForm.TopLevel = false;
+            childForm.FormBorderStyle = FormBorderStyle.None;
+            childForm.Dock = DockStyle.Fill;
+
+            // Thêm form con vào panel
+            pnHienThi.Controls.Add(childForm);
+            childForm.Show();
+        }
+
+        #endregion
     }
 }
