@@ -1,7 +1,5 @@
-using System.Drawing.Drawing2D;
-using Models.HandleData;
-using Models.Models;
 using Microsoft.EntityFrameworkCore;
+using Models.HandleData;
 
 namespace WinFormsApp1
 {
@@ -166,7 +164,7 @@ namespace WinFormsApp1
             {
                 if (taikhoan.Text == "Nhập tên đăng nhập...")
                 {
-                    taikhoan.Text = "";
+                    taikhoan.Text = string.Empty;
                     taikhoan.ForeColor = Color.Black;
                 }
             };
@@ -182,7 +180,7 @@ namespace WinFormsApp1
 
             matkhau.Enter += (sender, e) =>
             {
-                if (matkhau.Text == "")
+                if (matkhau.Text == string.Empty)
                 {
                     matkhau.ForeColor = Color.Black;
                 }
@@ -339,7 +337,7 @@ namespace WinFormsApp1
                 else
                 {
                     // Xóa thông tin đã lưu
-                    Properties.Settings.Default.RememberedUsername = "";
+                    Properties.Settings.Default.RememberedUsername = string.Empty;
                     Properties.Settings.Default.RememberMe = false;
                 }
 

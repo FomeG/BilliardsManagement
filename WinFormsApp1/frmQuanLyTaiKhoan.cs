@@ -1,15 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Models.Models;
-using Models.HandleData;
 using Microsoft.EntityFrameworkCore;
+using Models.HandleData;
+using Models.Models;
+using System.Data;
 
 namespace WinFormsApp1
 {
@@ -29,16 +21,16 @@ namespace WinFormsApp1
         private void SetupForm()
         {
             this.Text = "Quản lý Tài khoản";
-            
+
             // Setup DataGridView
             SetupDataGridView();
-            
+
             // Setup ComboBox
             SetupComboBox();
-            
+
             // Setup initial button states
             SetButtonStates(false);
-            
+
             // Clear form initially
             ClearForm();
         }
@@ -121,7 +113,7 @@ namespace WinFormsApp1
             btnXoa.Enabled = !editing && dgvTaiKhoan.SelectedRows.Count > 0;
             btnLuu.Enabled = editing;
             btnHuy.Enabled = editing;
-            
+
             // Enable/disable input controls
             txtTenDangNhap.Enabled = editing;
             txtMatKhau.Enabled = editing;
@@ -173,7 +165,7 @@ namespace WinFormsApp1
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi khi load thông tin tài khoản: {ex.Message}", "Lỗi", 
+                MessageBox.Show($"Lỗi khi load thông tin tài khoản: {ex.Message}", "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -198,7 +190,7 @@ namespace WinFormsApp1
             // Validate Tên đăng nhập (required, max 50 chars, unique)
             if (string.IsNullOrWhiteSpace(txtTenDangNhap.Text))
             {
-                MessageBox.Show("Vui lòng nhập tên đăng nhập!", "Validation Error", 
+                MessageBox.Show("Vui lòng nhập tên đăng nhập!", "Validation Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtTenDangNhap.Focus();
                 return false;
@@ -206,7 +198,7 @@ namespace WinFormsApp1
 
             if (txtTenDangNhap.Text.Trim().Length > 50)
             {
-                MessageBox.Show("Tên đăng nhập không được vượt quá 50 ký tự!", "Validation Error", 
+                MessageBox.Show("Tên đăng nhập không được vượt quá 50 ký tự!", "Validation Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtTenDangNhap.Focus();
                 return false;
@@ -215,7 +207,7 @@ namespace WinFormsApp1
             // Validate Mật khẩu (required, max 50 chars)
             if (string.IsNullOrWhiteSpace(txtMatKhau.Text))
             {
-                MessageBox.Show("Vui lòng nhập mật khẩu!", "Validation Error", 
+                MessageBox.Show("Vui lòng nhập mật khẩu!", "Validation Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtMatKhau.Focus();
                 return false;
@@ -223,7 +215,7 @@ namespace WinFormsApp1
 
             if (txtMatKhau.Text.Trim().Length > 50)
             {
-                MessageBox.Show("Mật khẩu không được vượt quá 50 ký tự!", "Validation Error", 
+                MessageBox.Show("Mật khẩu không được vượt quá 50 ký tự!", "Validation Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtMatKhau.Focus();
                 return false;
@@ -232,7 +224,7 @@ namespace WinFormsApp1
             // Validate Họ tên (required, max 100 chars)
             if (string.IsNullOrWhiteSpace(txtHoTen.Text))
             {
-                MessageBox.Show("Vui lòng nhập họ tên!", "Validation Error", 
+                MessageBox.Show("Vui lòng nhập họ tên!", "Validation Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtHoTen.Focus();
                 return false;
@@ -240,7 +232,7 @@ namespace WinFormsApp1
 
             if (txtHoTen.Text.Trim().Length > 100)
             {
-                MessageBox.Show("Họ tên không được vượt quá 100 ký tự!", "Validation Error", 
+                MessageBox.Show("Họ tên không được vượt quá 100 ký tự!", "Validation Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtHoTen.Focus();
                 return false;
@@ -249,7 +241,7 @@ namespace WinFormsApp1
             // Validate Vai trò (required, max 20 chars)
             if (cmbVaiTro.SelectedIndex == -1)
             {
-                MessageBox.Show("Vui lòng chọn vai trò!", "Validation Error", 
+                MessageBox.Show("Vui lòng chọn vai trò!", "Validation Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 cmbVaiTro.Focus();
                 return false;
@@ -290,7 +282,7 @@ namespace WinFormsApp1
         {
             if (dgvTaiKhoan.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Vui lòng chọn tài khoản để sửa!", "Thông báo", 
+                MessageBox.Show("Vui lòng chọn tài khoản để sửa!", "Thông báo",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }

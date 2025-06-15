@@ -7,6 +7,7 @@
         public string LoaiBan { get; set; }
         public decimal GiaTheoGio { get; set; }
         public int TrangThai { get; set; } // 0: Đang có người, 1: Trống, 2: Bảo trì
+        public bool IsDeleted { get; set; } = false; // Soft delete
 
         // các trường quan hệ _
         public virtual ICollection<PhienChoi> PhienChois { get; set; }

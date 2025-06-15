@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Models.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using Models.HandleData;
-using Microsoft.EntityFrameworkCore;
+using Models.Models;
+using System.Data;
 
 namespace WinFormsApp1
 {

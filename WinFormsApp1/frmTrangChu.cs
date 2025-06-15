@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Models.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using Models.HandleData;
-using Microsoft.EntityFrameworkCore;
+using Models.Models;
+using System.Data;
 
 namespace WinFormsApp1
 {
@@ -22,7 +14,6 @@ namespace WinFormsApp1
         private System.Windows.Forms.Timer? phienChoiCheckTimer; // Timer để check phiên chơi hết hạn
 
         // Lưu trữ nội dung trang chủ để restore lại
-        private List<Control> originalPnHienThiControls = new List<Control>();
         private Form? currentChildForm; // Form con hiện tại đang hiển thị
 
         public frmTrangChu(TaiKhoan user)
@@ -38,14 +29,10 @@ namespace WinFormsApp1
 
             // Thiết lập menu navigation
             SetupMenuNavigation();
-
-            // Lưu nội dung trang chủ ban đầu
-            SaveOriginalContent();
         }
 
         private void SetupUserInterface()
         {
-            pnHienThi.BackColor = Color.PeachPuff;
             btnSaveBan.Enabled = false; // Tắt nút Cập nhật
             btnDeleteBan.Enabled = false; // Tắt nút Xóa bàn
             // Thiết lập tiêu đề form
@@ -179,16 +166,17 @@ namespace WinFormsApp1
             panel1.Height = newHeight;
         }
 
+
+
+        // phần này liên quan đến thay đổi kích thước của table layout
         private void UpdateResponsiveLayout(int panelHeight)
         {
             // Tính toán vị trí và kích thước mới cho TableLayoutPanel và GroupBox
             int spacing = 10; // Khoảng cách giữa các controls
             int newTopPosition = panel1.Bottom + spacing;
 
-            // Tính chiều cao còn lại cho TableLayoutPanel và GroupBox
             int availableHeight = this.ClientSize.Height - newTopPosition - statusStrip.Height - spacing;
 
-            // Cập nhật TableLayoutPanel
             if (tableLayoutPanel1 != null)
             {
                 tableLayoutPanel1.Top = newTopPosition;
@@ -196,7 +184,6 @@ namespace WinFormsApp1
             }
 
 
-            // Cập nhật GroupBox
             if (groupBox1 != null)
             {
                 groupBox1.Top = newTopPosition;
@@ -206,14 +193,14 @@ namespace WinFormsApp1
 
 
 
-        // Thêm method để đăng xuất
+        // đăng xuất
         private void LogOut()
         {
             DialogResult result = MessageBox.Show("Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
                 dbContext?.Dispose(); // Giải phóng DbContext
-                this.Close(); // Đóng MainForm, sẽ trigger FormClosed event để hiển thị lại Form1
+                this.Close(); // Đóng MainForm, sẽ trigger FormClosed event để hiển thị lại form dang nhajap
             }
         }
 
@@ -228,8 +215,9 @@ namespace WinFormsApp1
                 // Sử dụng context riêng để tránh threading issues
                 using (var loadContext = new DaDBContext())
                 {
-                    // Lấy danh sách bàn từ database
+                    // Lấy danh sách bàn từ database (chỉ lấy bàn chưa bị xóa)
                     bans = await loadContext.Bans
+                        .Where(b => !b.IsDeleted)
                         .OrderBy(b => b.ID)
                         .ToListAsync();
                 }
@@ -362,12 +350,6 @@ namespace WinFormsApp1
             btnBaoTri.Enabled = true;
             btnBaoTri.Text = $"Bảo trì {ban.TenBan}";
 
-            // Thêm event handler cho các nút
-            btnDatBan.Click -= BtnDatBan_Click; // Remove existing handler if any
-            btnDatBan.Click += BtnDatBan_Click;
-
-            btnBaoTri.Click -= BtnBaoTri_Click; // Remove existing handler if any
-            btnBaoTri.Click += BtnBaoTri_Click;
 
             // Thêm lại các nút vào panel
             pnChiTiet.Controls.Add(btnDatBan);
@@ -470,21 +452,6 @@ namespace WinFormsApp1
             }
         }
 
-        private void BtnDatBan_Click(object sender, EventArgs e)
-        {
-            if (currentSelectedBan != null)
-            {
-                ShowDatBanForm(currentSelectedBan);
-            }
-        }
-
-        private async void BtnBaoTri_Click(object sender, EventArgs e)
-        {
-            if (currentSelectedBan != null)
-            {
-                await SetBanBaoTri(currentSelectedBan);
-            }
-        }
 
         private void ShowDatBanForm(Ban ban)
         {
@@ -565,12 +532,13 @@ namespace WinFormsApp1
                 var vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
                 var currentVietnamTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, vietnamTimeZone);
 
-                // Tìm các phiên chơi đang hoạt động và đã hết hạn
+                // Tìm các phiên chơi đang hoạt động và đã hết hạn (chỉ bàn chưa bị xóa)
                 var expiredPhienChois = await dbContext.PhienChois
                     .Include(p => p.Ban)
                     .Where(p => p.TrangThai == 1 && // Đang chơi
                                p.ThoiGianKetThuc.HasValue &&
-                               p.ThoiGianKetThuc.Value <= currentVietnamTime)
+                               p.ThoiGianKetThuc.Value <= currentVietnamTime &&
+                               !p.Ban.IsDeleted) // Chỉ lấy phiên chơi của bàn chưa bị xóa
                     .ToListAsync();
 
                 if (expiredPhienChois.Any())
@@ -701,7 +669,7 @@ namespace WinFormsApp1
                     k.GioiTinh ? "Nam" : "Nữ",
                     k.NgaySinh.ToString("dd/MM/yyyy"),
                     k.SoDienThoai,
-                    k.DiaChi ?? "",
+                    k.DiaChi ?? string.Empty,
                     k.NgayDangKy.ToString("dd/MM/yyyy"),
                     k.SoTienConLai.ToString("0.0")
                 );
@@ -868,7 +836,7 @@ namespace WinFormsApp1
                         rdNu.Checked = !khachHang.GioiTinh;
                         dateTimePicker1.Value = khachHang.NgaySinh;
                         txtSDT.Text = khachHang.SoDienThoai;
-                        txtDiaChi.Text = khachHang.DiaChi ?? "";
+                        txtDiaChi.Text = khachHang.DiaChi ?? string.Empty;
                         txtGioConLai.Text = khachHang.SoTienConLai.ToString();
                         lblNgayDangKy.Text = khachHang.NgayDangKy.ToString("dd/MM/yyyy HH:mm");
                     }
@@ -895,7 +863,7 @@ namespace WinFormsApp1
                 }
 
                 int banId = int.Parse(txtBanID.Text);
-                var ban = await dbContext.Bans.FindAsync(banId);
+                var ban = await dbContext.Bans.FirstOrDefaultAsync(b => b.ID == banId && !b.IsDeleted);
 
                 if (ban != null)
                 {
@@ -933,11 +901,13 @@ namespace WinFormsApp1
                 if (result == DialogResult.Yes)
                 {
                     int banId = int.Parse(txtBanID.Text);
-                    var ban = await dbContext.Bans.FindAsync(banId);
+                    var ban = await dbContext.Bans.FirstOrDefaultAsync(b => b.ID == banId && !b.IsDeleted);
 
                     if (ban != null)
                     {
-                        dbContext.Bans.Remove(ban);
+                        // Soft delete: đánh dấu IsDeleted = true thay vì xóa thật
+                        ban.IsDeleted = true;
+                        dbContext.Bans.Update(ban);
                         await dbContext.SaveChangesAsync();
 
                         MessageBox.Show("Xóa bàn thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1157,7 +1127,7 @@ namespace WinFormsApp1
             txtSDT.Clear();
             txtDiaChi.Clear();
             txtGioConLai.Text = "0";
-            lblNgayDangKy.Text = "";
+            lblNgayDangKy.Text = string.Empty;
 
             // Clear selection in DataGridView
             dataGridView1.ClearSelection();
@@ -1217,15 +1187,7 @@ namespace WinFormsApp1
             đăngXuấtToolStripMenuItem.Click += ĐăngXuấtToolStripMenuItem_Click;
         }
 
-        private void SaveOriginalContent()
-        {
-            // Lưu tất cả controls hiện tại trong pnHienThi
-            originalPnHienThiControls.Clear();
-            foreach (Control control in pnHienThi.Controls)
-            {
-                originalPnHienThiControls.Add(control);
-            }
-        }
+
 
         private void TrangChủToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1257,14 +1219,8 @@ namespace WinFormsApp1
                 currentChildForm = null;
             }
 
-            // Xóa tất cả controls trong pnHienThi
-            pnHienThi.Controls.Clear();
-
-            // Restore lại nội dung trang chủ ban đầu
-            foreach (Control control in originalPnHienThiControls)
-            {
-                pnHienThi.Controls.Add(control);
-            }
+            // Hiện lại panel trang chủ và ẩn các controls khác
+            ShowHomePageControls();
         }
 
         private void ShowSanPhamForm()
@@ -1286,8 +1242,8 @@ namespace WinFormsApp1
                 currentChildForm.Dispose();
             }
 
-            // Xóa tất cả controls trong pnHienThi
-            pnHienThi.Controls.Clear();
+            // Ẩn các controls trang chủ
+            HideHomePageControls();
 
             // Thiết lập form con
             currentChildForm = childForm;
@@ -1298,8 +1254,51 @@ namespace WinFormsApp1
             // Thêm form con vào panel
             pnHienThi.Controls.Add(childForm);
             childForm.Show();
+            childForm.BringToFront();
+        }
+
+        private void ShowHomePageControls()
+        {
+            // Ẩn form con hiện tại nếu có
+            if (currentChildForm != null)
+            {
+                currentChildForm.Visible = false;
+            }
+
+            // Hiện lại các controls trang chủ
+            panel1.Visible = true;
+            tableLayoutPanel1.Visible = true;
+            groupBox1.Visible = true;
+
+            panel1.BringToFront();
+            tableLayoutPanel1.BringToFront();
+            groupBox1.BringToFront();
+        }
+
+        private void HideHomePageControls()
+        {
+            // Ẩn các controls trang chủ
+            panel1.Visible = false;
+            tableLayoutPanel1.Visible = false;
+            groupBox1.Visible = false;
         }
 
         #endregion
+
+        private async void btnDatBan_Click_1(object sender, EventArgs e)
+        {
+            if (currentSelectedBan != null)
+            {
+                ShowDatBanForm(currentSelectedBan);
+            }
+        }
+
+        private async void btnBaoTri_Click_1(object sender, EventArgs e)
+        {
+            if (currentSelectedBan != null)
+            {
+                await SetBanBaoTri(currentSelectedBan);
+            }
+        }
     }
 }

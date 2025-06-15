@@ -13,9 +13,19 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                components.Dispose();
+                // Dispose image trong PictureBox trước khi dispose components
+                if (picHinhAnh?.Image != null)
+                {
+                    picHinhAnh.Image.Dispose();
+                    picHinhAnh.Image = null;
+                }
+
+                if (components != null)
+                {
+                    components.Dispose();
+                }
             }
             base.Dispose(disposing);
         }

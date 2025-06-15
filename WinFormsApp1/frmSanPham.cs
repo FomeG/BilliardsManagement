@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Models.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using Models.HandleData;
-using Microsoft.EntityFrameworkCore;
+using Models.Models;
+using System.Data;
 
 namespace WinFormsApp1
 {
@@ -160,17 +152,23 @@ namespace WinFormsApp1
                     txtDonGia.Text = sanPham.DonGia.ToString();
                     chkConHang.Checked = sanPham.ConHang;
 
+                    // Dispose image cũ trước khi gán image mới
+                    if (picHinhAnh.Image != null)
+                    {
+                        picHinhAnh.Image.Dispose();
+                        picHinhAnh.Image = null;
+                    }
+
                     // Load hình ảnh nếu có
                     if (sanPham.HinhAnh != null && sanPham.HinhAnh.Length > 0)
                     {
                         using (var ms = new MemoryStream(sanPham.HinhAnh))
                         {
-                            picHinhAnh.Image = Image.FromStream(ms);
+                            // Tạo copy của image để tránh lỗi khi stream bị dispose
+                            var originalImage = Image.FromStream(ms);
+                            picHinhAnh.Image = new Bitmap(originalImage);
+                            originalImage.Dispose();
                         }
-                    }
-                    else
-                    {
-                        picHinhAnh.Image = null;
                     }
                 }
             }
@@ -188,7 +186,14 @@ namespace WinFormsApp1
             txtLoaiSanPham.Clear();
             txtDonGia.Clear();
             chkConHang.Checked = true;
-            picHinhAnh.Image = null;
+
+            // Dispose image cũ trước khi clear
+            if (picHinhAnh.Image != null)
+            {
+                picHinhAnh.Image.Dispose();
+                picHinhAnh.Image = null;
+            }
+
             dgvSanPham.ClearSelection();
         }
 
@@ -287,8 +292,12 @@ namespace WinFormsApp1
                 {
                     using (var ms = new MemoryStream())
                     {
-                        picHinhAnh.Image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-                        hinhAnhData = ms.ToArray();
+                        // Tạo copy của image để tránh lỗi GDI khi save
+                        using (var imageCopy = new Bitmap(picHinhAnh.Image))
+                        {
+                            imageCopy.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                            hinhAnhData = ms.ToArray();
+                        }
                     }
                 }
 
@@ -408,7 +417,18 @@ namespace WinFormsApp1
                 {
                     try
                     {
-                        picHinhAnh.Image = Image.FromFile(openFileDialog.FileName);
+                        // Dispose image cũ trước khi gán image mới
+                        if (picHinhAnh.Image != null)
+                        {
+                            picHinhAnh.Image.Dispose();
+                            picHinhAnh.Image = null;
+                        }
+
+                        // Load image từ file và tạo copy để tránh file lock
+                        using (var originalImage = Image.FromFile(openFileDialog.FileName))
+                        {
+                            picHinhAnh.Image = new Bitmap(originalImage);
+                        }
                     }
                     catch (Exception ex)
                     {

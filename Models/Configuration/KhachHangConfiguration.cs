@@ -9,13 +9,13 @@ namespace Models.Configuration
         public void Configure(EntityTypeBuilder<KhachHang> builder)
         {
             builder.ToTable("KhachHang");
-            
+
             builder.HasKey(k => k.ID);
-            
+
             builder.Property(k => k.ID)
                 .HasColumnName("ID")
                 .ValueGeneratedOnAdd();
-            
+
             builder.Property(k => k.HoTen)
                 .HasColumnName("HoTen")
                 .HasMaxLength(100)

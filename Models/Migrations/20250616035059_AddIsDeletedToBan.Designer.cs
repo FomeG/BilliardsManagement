@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models.HandleData;
 
@@ -11,9 +12,11 @@ using Models.HandleData;
 namespace Models.Migrations
 {
     [DbContext(typeof(DaDBContext))]
-    partial class DaDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250616035059_AddIsDeletedToBan")]
+    partial class AddIsDeletedToBan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

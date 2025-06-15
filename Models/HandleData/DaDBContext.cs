@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Models.Models;
 using Models.Configuration;
+using Models.Models;
 
 namespace Models.HandleData
 {
@@ -27,7 +27,7 @@ namespace Models.HandleData
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Database=BilliardsManagement_DB;Trusted_Connection=True;TrustServerCertificate=True");
+                optionsBuilder.UseSqlServer("Server=MAY23\\SQLEXPRESS;Database=BilliardsManagement_DB;Trusted_Connection=True;TrustServerCertificate=True");
             }
         }
 

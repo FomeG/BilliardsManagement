@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Models.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using Models.HandleData;
-using Microsoft.EntityFrameworkCore;
+using Models.Models;
+using System.Data;
 
 namespace WinFormsApp1
 {
@@ -155,7 +147,7 @@ namespace WinFormsApp1
                     TongThoiGian = soGioChoi,
                     TienBan = soTienTra,
                     TrangThai = 1, // Đang chơi
-                    TenKhachVangLai = "" // Khởi tạo với chuỗi rỗng thay vì null
+                    TenKhachVangLai = string.Empty
                 };
 
                 if (rdKhachHang.Checked)
@@ -164,7 +156,7 @@ namespace WinFormsApp1
                     if (selectedKhachHang != null)
                     {
                         phienChoi.KhachHangID = selectedKhachHang.ID;
-                        phienChoi.TenKhachVangLai = ""; // Để trống cho khách hàng thành viên
+                        phienChoi.TenKhachVangLai = string.Empty; // Để trống cho khách hàng thành viên
 
                         // MessageBox.Show($"Selected Customer: {selectedKhachHang.HoTen}", "Debug");
 

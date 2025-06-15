@@ -80,7 +80,6 @@
             // 
             numSoLuong.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             numSoLuong.Location = new Point(75, 448);
-            numSoLuong.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
             numSoLuong.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numSoLuong.Name = "numSoLuong";
             numSoLuong.Size = new Size(189, 23);

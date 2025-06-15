@@ -9,36 +9,36 @@ namespace Models.Configuration
         public void Configure(EntityTypeBuilder<HoaDon> builder)
         {
             builder.ToTable("HoaDon");
-            
+
             builder.HasKey(h => h.ID);
-            
+
             builder.Property(h => h.ID)
                 .HasColumnName("ID")
                 .ValueGeneratedOnAdd();
-            
+
             builder.Property(h => h.PhienChoiID)
                 .HasColumnName("PhienChoiID");
-            
+
             builder.Property(h => h.KhachHangID)
                 .HasColumnName("KhachHangID");
-            
+
             builder.Property(h => h.TenKhachVangLai)
                 .HasColumnName("TenKhachVangLai")
                 .HasMaxLength(100);
-            
+
             builder.Property(h => h.NhanVienID)
                 .HasColumnName("NhanVienID")
                 .IsRequired();
-            
+
             builder.Property(h => h.NgayLap)
                 .HasColumnName("NgayLap")
                 .HasDefaultValueSql("GETDATE()");
-            
+
             builder.Property(h => h.TongTien)
                 .HasColumnName("TongTien")
                 .HasColumnType("decimal(10,2)")
                 .HasDefaultValue(0);
-            
+
             builder.Property(h => h.TrangThai)
                 .HasColumnName("TrangThai")
                 .HasColumnType("int")

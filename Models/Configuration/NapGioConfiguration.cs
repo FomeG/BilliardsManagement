@@ -9,26 +9,26 @@ namespace Models.Configuration
         public void Configure(EntityTypeBuilder<NapGio> builder)
         {
             builder.ToTable("NapGio");
-            
+
             builder.HasKey(n => n.ID);
-            
+
             builder.Property(n => n.ID)
                 .HasColumnName("ID")
                 .ValueGeneratedOnAdd();
-            
+
             builder.Property(n => n.KhachHangID)
                 .HasColumnName("KhachHangID")
                 .IsRequired();
-            
+
             builder.Property(n => n.NhanVienID)
                 .HasColumnName("NhanVienID")
                 .IsRequired();
-            
+
             builder.Property(n => n.SoTienNap)
                 .HasColumnName("SoTienNap")
                 .HasColumnType("decimal(10,2)")
                 .IsRequired();
-            
+
             builder.Property(n => n.NgayNap)
                 .HasColumnName("NgayNap")
                 .HasDefaultValueSql("GETDATE()");
