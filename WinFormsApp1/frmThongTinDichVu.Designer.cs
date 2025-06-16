@@ -108,6 +108,7 @@
             // 
             btnThemDichVu.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnThemDichVu.BackColor = Color.FromArgb(40, 167, 69);
+            btnThemDichVu.FlatAppearance.BorderColor = Color.Black;
             btnThemDichVu.FlatStyle = FlatStyle.Flat;
             btnThemDichVu.ForeColor = Color.White;
             btnThemDichVu.Location = new Point(12, 492);
@@ -122,6 +123,7 @@
             // 
             btnThanhToan.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             btnThanhToan.BackColor = Color.FromArgb(0, 123, 255);
+            btnThanhToan.FlatAppearance.BorderColor = Color.Black;
             btnThanhToan.FlatStyle = FlatStyle.Flat;
             btnThanhToan.ForeColor = Color.White;
             btnThanhToan.Location = new Point(98, 492);
@@ -136,6 +138,7 @@
             // 
             btnHuyBan.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnHuyBan.BackColor = Color.FromArgb(220, 53, 69);
+            btnHuyBan.FlatAppearance.BorderColor = Color.Black;
             btnHuyBan.FlatStyle = FlatStyle.Flat;
             btnHuyBan.ForeColor = Color.White;
             btnHuyBan.Location = new Point(184, 492);
@@ -158,6 +161,7 @@
             // btnXoaDichVu
             // 
             btnXoaDichVu.BackColor = Color.FromArgb(220, 53, 69);
+            btnXoaDichVu.FlatAppearance.BorderColor = Color.Black;
             btnXoaDichVu.FlatStyle = FlatStyle.Flat;
             btnXoaDichVu.ForeColor = Color.White;
             btnXoaDichVu.Location = new Point(12, 160);

@@ -91,6 +91,7 @@
             // 
             btnThem.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnThem.BackColor = Color.FromArgb(40, 167, 69);
+            btnThem.FlatAppearance.BorderColor = Color.Black;
             btnThem.FlatStyle = FlatStyle.Flat;
             btnThem.ForeColor = Color.White;
             btnThem.Location = new Point(12, 508);
@@ -105,6 +106,7 @@
             // 
             btnHuy.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnHuy.BackColor = Color.FromArgb(220, 53, 69);
+            btnHuy.FlatAppearance.BorderColor = Color.Black;
             btnHuy.FlatStyle = FlatStyle.Flat;
             btnHuy.ForeColor = Color.White;
             btnHuy.Location = new Point(144, 508);

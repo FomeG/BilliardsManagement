@@ -55,15 +55,17 @@ namespace WinFormsApp1
             // dgvTaiKhoan
             // 
             dgvTaiKhoan.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvTaiKhoan.BackgroundColor = Color.White;
             dgvTaiKhoan.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvTaiKhoan.Location = new Point(12, 12);
             dgvTaiKhoan.Name = "dgvTaiKhoan";
-            dgvTaiKhoan.Size = new Size(776, 300);
+            dgvTaiKhoan.Size = new Size(840, 360);
             dgvTaiKhoan.TabIndex = 0;
             // 
             // groupBox1
             // 
             groupBox1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox1.BackColor = Color.White;
             groupBox1.Controls.Add(chkTrangThai);
             groupBox1.Controls.Add(cmbVaiTro);
             groupBox1.Controls.Add(txtHoTen);
@@ -75,9 +77,9 @@ namespace WinFormsApp1
             groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label1);
-            groupBox1.Location = new Point(12, 330);
+            groupBox1.Location = new Point(12, 378);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(580, 180);
+            groupBox1.Size = new Size(644, 200);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Thông tin tài khoản";
@@ -87,7 +89,7 @@ namespace WinFormsApp1
             chkTrangThai.AutoSize = true;
             chkTrangThai.Location = new Point(120, 150);
             chkTrangThai.Name = "chkTrangThai";
-            chkTrangThai.Size = new Size(84, 19);
+            chkTrangThai.Size = new Size(83, 19);
             chkTrangThai.TabIndex = 10;
             chkTrangThai.Text = "Hoạt động";
             chkTrangThai.UseVisualStyleBackColor = true;
@@ -136,7 +138,7 @@ namespace WinFormsApp1
             label5.AutoSize = true;
             label5.Location = new Point(20, 123);
             label5.Name = "label5";
-            label5.Size = new Size(46, 15);
+            label5.Size = new Size(43, 15);
             label5.TabIndex = 4;
             label5.Text = "Vai trò:";
             // 
@@ -163,7 +165,7 @@ namespace WinFormsApp1
             label2.AutoSize = true;
             label2.Location = new Point(20, 33);
             label2.Name = "label2";
-            label2.Size = new Size(94, 15);
+            label2.Size = new Size(88, 15);
             label2.TabIndex = 1;
             label2.Text = "Tên đăng nhập:";
             // 
@@ -179,73 +181,80 @@ namespace WinFormsApp1
             // groupBox2
             // 
             groupBox2.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            groupBox2.BackColor = Color.White;
             groupBox2.Controls.Add(btnHuy);
             groupBox2.Controls.Add(btnLuu);
             groupBox2.Controls.Add(btnXoa);
             groupBox2.Controls.Add(btnSua);
             groupBox2.Controls.Add(btnThem);
-            groupBox2.Location = new Point(610, 330);
+            groupBox2.Location = new Point(674, 378);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(178, 180);
+            groupBox2.Size = new Size(178, 200);
             groupBox2.TabIndex = 2;
             groupBox2.TabStop = false;
             groupBox2.Text = "Chức năng";
             // 
             // btnHuy
             // 
-            btnHuy.Location = new Point(20, 140);
+            btnHuy.BackColor = SystemColors.Control;
+            btnHuy.Location = new Point(19, 160);
             btnHuy.Name = "btnHuy";
             btnHuy.Size = new Size(140, 30);
             btnHuy.TabIndex = 4;
             btnHuy.Text = "Hủy";
-            btnHuy.UseVisualStyleBackColor = true;
+            btnHuy.UseVisualStyleBackColor = false;
             btnHuy.Click += btnHuy_Click;
             // 
             // btnLuu
             // 
-            btnLuu.Location = new Point(20, 105);
+            btnLuu.BackColor = SystemColors.Control;
+            btnLuu.Location = new Point(19, 125);
             btnLuu.Name = "btnLuu";
             btnLuu.Size = new Size(140, 30);
             btnLuu.TabIndex = 3;
             btnLuu.Text = "Lưu";
-            btnLuu.UseVisualStyleBackColor = true;
+            btnLuu.UseVisualStyleBackColor = false;
             btnLuu.Click += btnLuu_Click;
             // 
             // btnXoa
             // 
-            btnXoa.Location = new Point(20, 70);
+            btnXoa.BackColor = SystemColors.Control;
+            btnXoa.Location = new Point(19, 90);
             btnXoa.Name = "btnXoa";
             btnXoa.Size = new Size(140, 30);
             btnXoa.TabIndex = 2;
             btnXoa.Text = "Xóa";
-            btnXoa.UseVisualStyleBackColor = true;
+            btnXoa.UseVisualStyleBackColor = false;
             btnXoa.Click += btnXoa_Click;
             // 
             // btnSua
             // 
-            btnSua.Location = new Point(20, 35);
+            btnSua.BackColor = SystemColors.Control;
+            btnSua.Location = new Point(19, 55);
             btnSua.Name = "btnSua";
             btnSua.Size = new Size(140, 30);
             btnSua.TabIndex = 1;
             btnSua.Text = "Sửa";
-            btnSua.UseVisualStyleBackColor = true;
+            btnSua.UseVisualStyleBackColor = false;
             btnSua.Click += btnSua_Click;
             // 
             // btnThem
             // 
-            btnThem.Location = new Point(20, 0);
+            btnThem.BackColor = SystemColors.Control;
+            btnThem.Location = new Point(19, 20);
             btnThem.Name = "btnThem";
             btnThem.Size = new Size(140, 30);
             btnThem.TabIndex = 0;
             btnThem.Text = "Thêm";
-            btnThem.UseVisualStyleBackColor = true;
+            btnThem.UseVisualStyleBackColor = false;
             btnThem.Click += btnThem_Click;
             // 
             // frmQuanLyTaiKhoan
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 530);
+            BackColor = Color.PeachPuff;
+            ClientSize = new Size(864, 598);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Controls.Add(dgvTaiKhoan);

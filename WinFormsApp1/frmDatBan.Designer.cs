@@ -149,6 +149,7 @@
             // btnDatBan
             // 
             btnDatBan.BackColor = Color.FromArgb(40, 167, 69);
+            btnDatBan.FlatAppearance.BorderColor = Color.Black;
             btnDatBan.FlatStyle = FlatStyle.Flat;
             btnDatBan.ForeColor = Color.White;
             btnDatBan.Location = new Point(12, 290);
@@ -163,6 +164,7 @@
             // 
             btnHuy.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnHuy.BackColor = Color.FromArgb(220, 53, 69);
+            btnHuy.FlatAppearance.BorderColor = Color.Black;
             btnHuy.FlatStyle = FlatStyle.Flat;
             btnHuy.ForeColor = Color.White;
             btnHuy.Location = new Point(144, 290);

@@ -29,6 +29,9 @@ namespace WinFormsApp1
 
             // Thiết lập menu navigation
             SetupMenuNavigation();
+
+            // Đảm bảo hiển thị trang chủ ban đầu
+            ShowHomePageControls();
         }
 
         private void SetupUserInterface()
@@ -272,7 +275,7 @@ namespace WinFormsApp1
             // Đặt màu theo trạng thái
             SetBanButtonColor(btnBan, ban.TrangThai);
 
-            // Thêm sự kiện click
+            // Thêm sự kiện click cho tất cả các bàn
             btnBan.Click += BtnBan_Click;
 
             // Thêm vào TableLayoutPanel
@@ -323,10 +326,10 @@ namespace WinFormsApp1
                     ShowBanTrongOptions(ban);
                     break;
                 case 2: // Bàn bảo trì - có thể thêm xử lý sau
-                    // MessageBox.Show("Bàn đang trong trạng thái bảo trì!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Bàn đang trong trạng thái bảo trì!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
                 default:
-                    // Load thông tin bàn vào tab Thông tin bàn (giữ nguyên logic cũ cho admin)
+                    // Chỉ bàn có trạng thái "không xác định" mới cho phép chỉnh sửa thông tin
                     LoadBanToForm(ban);
                     tabControl1.SelectedTab = tabPageBan;
                     break;
@@ -382,7 +385,7 @@ namespace WinFormsApp1
             txtTenBan.Text = ban.TenBan;
             txtLoaiBan.Text = ban.LoaiBan;
             txtGiaTheoGio.Text = ban.GiaTheoGio.ToString();
-            cmbTrangThaiBan.SelectedIndex = ban.TrangThai;
+            // Bỏ combobox trạng thái - trạng thái sẽ được quản lý tự động
             btnNewBan.Enabled = false; // Tắt nút Thêm mới khi đã chọn bàn
             btnSaveBan.Enabled = true; // Bật nút Cập nhật
             btnDeleteBan.Enabled = true; // Bật nút Xóa bàn
@@ -781,43 +784,22 @@ namespace WinFormsApp1
                     FillWeight = 15
                 });
 
-                // Set selection mode
+                // cài đặt các thuộc tính của datagridview
                 dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
                 dataGridView1.MultiSelect = false;
                 dataGridView1.AllowUserToAddRows = false;
                 dataGridView1.AllowUserToDeleteRows = false;
                 dataGridView1.ReadOnly = true;
 
-                // Set responsive behavior
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None; // Use individual column settings
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
                 dataGridView1.ScrollBars = ScrollBars.Both;
                 dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 
-                // Add event handler for row selection
-                dataGridView1.SelectionChanged += DataGridView1_SelectionChanged;
+  
             }
         }
 
-        private void DataGridView1_SelectionChanged(object sender, EventArgs e)
-        {
-            if (dataGridView1.SelectedRows.Count > 0)
-            {
-                var selectedRow = dataGridView1.SelectedRows[0];
-                LoadThanhVienToForm(selectedRow);
-
-                // Khi chọn dữ liệu: disable nút Thêm, enable nút Sửa và Xóa
-                btnThemTV.Enabled = false;
-                btnSuaTV.Enabled = true;
-                btnXoaTV.Enabled = true;
-            }
-            else
-            {
-                // Khi không chọn dữ liệu: enable nút Thêm, disable nút Sửa và Xóa
-                btnThemTV.Enabled = true;
-                btnSuaTV.Enabled = false;
-                btnXoaTV.Enabled = false;
-            }
-        }
+  
 
         private async void LoadThanhVienToForm(DataGridViewRow row)
         {
@@ -867,11 +849,11 @@ namespace WinFormsApp1
 
                 if (ban != null)
                 {
-                    // Cập nhật thông tin
+                    // Cập nhật thông tin (không cập nhật trạng thái - trạng thái được quản lý tự động)
                     ban.TenBan = txtTenBan.Text.Trim();
                     ban.LoaiBan = txtLoaiBan.Text.Trim();
                     ban.GiaTheoGio = decimal.Parse(txtGiaTheoGio.Text);
-                    ban.TrangThai = cmbTrangThaiBan.SelectedIndex;
+                    // Bỏ cập nhật trạng thái từ combobox
 
                     await dbContext.SaveChangesAsync();
 
@@ -940,7 +922,7 @@ namespace WinFormsApp1
                     TenBan = txtTenBan.Text.Trim(),
                     LoaiBan = txtLoaiBan.Text.Trim(),
                     GiaTheoGio = decimal.Parse(txtGiaTheoGio.Text),
-                    TrangThai = cmbTrangThaiBan.SelectedIndex
+                    TrangThai = 1 // Mặc định là trống (bàn mới tạo thì cứ để trống nhưu vậy, ai dặt thì đặt)
                 };
 
                 dbContext.Bans.Add(newBan);
@@ -948,7 +930,7 @@ namespace WinFormsApp1
 
                 MessageBox.Show("Thêm bàn mới thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Clear form và refresh danh sách
+                // xóa dữ liệu trên ô txtbox và tải lại dữ liệu 
                 ClearBanForm();
                 await RefreshBanData();
             }
@@ -964,7 +946,6 @@ namespace WinFormsApp1
             txtTenBan.Clear();
             txtLoaiBan.Clear();
             txtGiaTheoGio.Clear();
-            cmbTrangThaiBan.SelectedIndex = 1; // Mặc định là trống
             btnNewBan.Enabled = true; // Bật nút Thêm mới
             btnSaveBan.Enabled = false; // Tắt nút Cập nhật
             btnDeleteBan.Enabled = false; // Tắt nút Xóa bàn
@@ -1123,7 +1104,7 @@ namespace WinFormsApp1
             txtTenThanhVien.Clear();
             rdNam.Checked = true;
             rdNu.Checked = false;
-            dateTimePicker1.Value = DateTime.Now.AddYears(-25); // Default 25 tuổi
+            dateTimePicker1.Value = DateTime.Now.AddYears(-18); // Default 18 tuổi
             txtSDT.Clear();
             txtDiaChi.Clear();
             txtGioConLai.Text = "0";
@@ -1162,13 +1143,68 @@ namespace WinFormsApp1
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                var selectedRow = dataGridView1.SelectedRows[0];
+                LoadThanhVienToForm(selectedRow);
 
+                // Khi chọn dữ liệu: disable nút Thêm, enable nút Sửa và Xóa
+                btnThemTV.Enabled = false;
+                btnSuaTV.Enabled = true;
+                btnXoaTV.Enabled = true;
+            }
+            else
+            {
+                // Khi không chọn dữ liệu: enable nút Thêm, disable nút Sửa và Xóa
+                btnThemTV.Enabled = true;
+                btnSuaTV.Enabled = false;
+                btnXoaTV.Enabled = false;
+            }
         }
 
         private void btnNap_Click(object sender, EventArgs e)
         {
-            frmNapTien napt = new frmNapTien();
-            napt.Show();
+            // Kiểm tra xem có khách hàng nào được chọn không
+            if (dataGridView1.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Vui lòng chọn khách hàng để nạp tiền!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                // Lấy thông tin khách hàng được chọn
+                var selectedRow = dataGridView1.SelectedRows[0];
+                if (selectedRow.Cells["ID"].Value != null)
+                {
+                    int khachHangId = Convert.ToInt32(selectedRow.Cells["ID"].Value);
+
+                    // Tìm khách hàng trong database
+                    var khachHang = dbContext.KhachHangs.Find(khachHangId);
+                    if (khachHang != null)
+                    {
+                        // Mở form nạp tiền với callback để refresh dữ liệu và reset form
+                        var frmNap = new frmNapTien(khachHang, currentUser, async () =>
+                        {
+                            await RefreshThanhVienData();
+                            // Reset form thành viên để hiển thị dữ liệu mới nhất
+                            ClearThanhVienForm();
+                        });
+                        frmNap.ShowDialog(this);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Không tìm thấy thông tin khách hàng!", "Lỗi",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi mở form nạp tiền: {ex.Message}", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -1183,6 +1219,7 @@ namespace WinFormsApp1
             // Thêm event handlers cho các menu items
             trangChủToolStripMenuItem.Click += TrangChủToolStripMenuItem_Click;
             đồĂnThứcUốngToolStripMenuItem.Click += ĐồĂnThứcUốngToolStripMenuItem_Click;
+            thốngKêToolStripMenuItem.Click += ThốngKêToolStripMenuItem_Click;
             quảnLýTàiKhoảnToolStripMenuItem.Click += QuảnLýTàiKhoảnToolStripMenuItem_Click;
             đăngXuấtToolStripMenuItem.Click += ĐăngXuấtToolStripMenuItem_Click;
         }
@@ -1197,6 +1234,11 @@ namespace WinFormsApp1
         private void ĐồĂnThứcUốngToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ShowSanPhamForm();
+        }
+
+        private void ThốngKêToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowThongKeForm();
         }
 
         private void QuảnLýTàiKhoảnToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1226,6 +1268,11 @@ namespace WinFormsApp1
         private void ShowSanPhamForm()
         {
             ShowChildForm(new frmSanPham(dbContext));
+        }
+
+        private void ShowThongKeForm()
+        {
+            ShowChildForm(new frmThongKe(dbContext, currentUser));
         }
 
         private void ShowQuanLyTaiKhoanForm()

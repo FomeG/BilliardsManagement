@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             tableLayoutPanel1 = new TableLayoutPanel();
             groupBox1 = new GroupBox();
             pnChiTiet = new Panel();
-            btnBaoTri = new Button();
             btnDatBan = new Button();
+            btnBaoTri = new Button();
             panel1 = new Panel();
             tabControl1 = new TabControl();
             tabPageBan = new TabPage();
@@ -45,8 +45,6 @@
             btnNewBan = new Button();
             btnDeleteBan = new Button();
             btnSaveBan = new Button();
-            cmbTrangThaiBan = new ComboBox();
-            lblTrangThaiBan = new Label();
             txtGiaTheoGio = new TextBox();
             lblGiaTheoGio = new Label();
             txtLoaiBan = new TextBox();
@@ -96,6 +94,7 @@
             càiĐặtToolStripMenuItem = new ToolStripMenuItem();
             đăngXuấtToolStripMenuItem = new ToolStripMenuItem();
             pnHienThi = new Panel();
+            panel2 = new Panel();
             groupBox1.SuspendLayout();
             pnChiTiet.SuspendLayout();
             panel1.SuspendLayout();
@@ -107,6 +106,8 @@
             contextMenuStrip1.SuspendLayout();
             panel3.SuspendLayout();
             menuStrip1.SuspendLayout();
+            pnHienThi.SuspendLayout();
+            panel2.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -121,7 +122,7 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5F));
-            tableLayoutPanel1.Location = new Point(12, 340);
+            tableLayoutPanel1.Location = new Point(9, 302);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 5;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
@@ -132,7 +133,7 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel1.Size = new Size(626, 321);
+            tableLayoutPanel1.Size = new Size(626, 330);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // groupBox1
@@ -140,9 +141,9 @@
             groupBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             groupBox1.BackColor = Color.Transparent;
             groupBox1.Controls.Add(pnChiTiet);
-            groupBox1.Location = new Point(644, 340);
+            groupBox1.Location = new Point(646, 306);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(351, 321);
+            groupBox1.Size = new Size(351, 326);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Chi tiết";
@@ -150,47 +151,53 @@
             // pnChiTiet
             // 
             pnChiTiet.BackColor = SystemColors.ButtonHighlight;
-            pnChiTiet.Controls.Add(btnBaoTri);
             pnChiTiet.Controls.Add(btnDatBan);
+            pnChiTiet.Controls.Add(btnBaoTri);
             pnChiTiet.Dock = DockStyle.Fill;
             pnChiTiet.Location = new Point(3, 19);
             pnChiTiet.Name = "pnChiTiet";
-            pnChiTiet.Size = new Size(345, 299);
+            pnChiTiet.Size = new Size(345, 304);
             pnChiTiet.TabIndex = 0;
-            // 
-            // btnBaoTri
-            // 
-            btnBaoTri.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            btnBaoTri.Enabled = false;
-            btnBaoTri.Location = new Point(3, 89);
-            btnBaoTri.Name = "btnBaoTri";
-            btnBaoTri.Size = new Size(339, 80);
-            btnBaoTri.TabIndex = 1;
-            btnBaoTri.Text = "Bảo trì";
-            btnBaoTri.UseVisualStyleBackColor = true;
-            btnBaoTri.Visible = false;
-            btnBaoTri.Click += btnBaoTri_Click_1;
             // 
             // btnDatBan
             // 
             btnDatBan.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            btnDatBan.BackColor = Color.FromArgb(192, 255, 192);
             btnDatBan.Enabled = false;
+            btnDatBan.FlatStyle = FlatStyle.Flat;
+            btnDatBan.Font = new Font("Arial", 12F, FontStyle.Bold);
             btnDatBan.Location = new Point(3, 3);
             btnDatBan.Name = "btnDatBan";
             btnDatBan.Size = new Size(339, 80);
             btnDatBan.TabIndex = 0;
             btnDatBan.Text = "Đặt bàn mới";
-            btnDatBan.UseVisualStyleBackColor = true;
+            btnDatBan.UseVisualStyleBackColor = false;
             btnDatBan.Visible = false;
             btnDatBan.Click += btnDatBan_Click_1;
+            // 
+            // btnBaoTri
+            // 
+            btnBaoTri.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            btnBaoTri.BackColor = Color.Bisque;
+            btnBaoTri.Enabled = false;
+            btnBaoTri.FlatStyle = FlatStyle.Flat;
+            btnBaoTri.Font = new Font("Arial", 12F, FontStyle.Bold);
+            btnBaoTri.Location = new Point(3, 89);
+            btnBaoTri.Name = "btnBaoTri";
+            btnBaoTri.Size = new Size(339, 80);
+            btnBaoTri.TabIndex = 1;
+            btnBaoTri.Text = "Bảo trì";
+            btnBaoTri.UseVisualStyleBackColor = false;
+            btnBaoTri.Visible = false;
+            btnBaoTri.Click += btnBaoTri_Click_1;
             // 
             // panel1
             // 
             panel1.Controls.Add(tabControl1);
             panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 27);
+            panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1007, 300);
+            panel1.Size = new Size(1007, 296);
             panel1.TabIndex = 2;
             // 
             // tabControl1
@@ -202,7 +209,7 @@
             tabControl1.Location = new Point(0, 0);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(1007, 300);
+            tabControl1.Size = new Size(1007, 296);
             tabControl1.TabIndex = 0;
             // 
             // tabPageBan
@@ -213,8 +220,6 @@
             tabPageBan.Controls.Add(btnNewBan);
             tabPageBan.Controls.Add(btnDeleteBan);
             tabPageBan.Controls.Add(btnSaveBan);
-            tabPageBan.Controls.Add(cmbTrangThaiBan);
-            tabPageBan.Controls.Add(lblTrangThaiBan);
             tabPageBan.Controls.Add(txtGiaTheoGio);
             tabPageBan.Controls.Add(lblGiaTheoGio);
             tabPageBan.Controls.Add(txtLoaiBan);
@@ -226,7 +231,7 @@
             tabPageBan.Location = new Point(4, 24);
             tabPageBan.Name = "tabPageBan";
             tabPageBan.Padding = new Padding(3);
-            tabPageBan.Size = new Size(999, 272);
+            tabPageBan.Size = new Size(999, 268);
             tabPageBan.TabIndex = 0;
             tabPageBan.Text = "Thông tin bàn";
             // 
@@ -234,10 +239,10 @@
             // 
             button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             button1.BackColor = Color.Silver;
-            button1.FlatAppearance.BorderColor = Color.White;
+            button1.FlatAppearance.BorderColor = SystemColors.ActiveCaptionText;
             button1.FlatStyle = FlatStyle.Flat;
             button1.ForeColor = Color.Black;
-            button1.Location = new Point(913, 241);
+            button1.Location = new Point(906, 237);
             button1.Name = "button1";
             button1.Size = new Size(80, 25);
             button1.TabIndex = 13;
@@ -249,10 +254,10 @@
             // 
             btnBoChon.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnBoChon.BackColor = Color.Silver;
-            btnBoChon.FlatAppearance.BorderColor = Color.White;
+            btnBoChon.FlatAppearance.BorderColor = SystemColors.ActiveCaptionText;
             btnBoChon.FlatStyle = FlatStyle.Flat;
             btnBoChon.ForeColor = Color.Black;
-            btnBoChon.Location = new Point(263, 241);
+            btnBoChon.Location = new Point(267, 237);
             btnBoChon.Name = "btnBoChon";
             btnBoChon.Size = new Size(80, 25);
             btnBoChon.TabIndex = 13;
@@ -264,9 +269,10 @@
             // 
             btnNewBan.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnNewBan.BackColor = Color.FromArgb(40, 167, 69);
+            btnNewBan.FlatAppearance.BorderColor = SystemColors.ActiveCaptionText;
             btnNewBan.FlatStyle = FlatStyle.Flat;
             btnNewBan.ForeColor = Color.White;
-            btnNewBan.Location = new Point(5, 241);
+            btnNewBan.Location = new Point(9, 237);
             btnNewBan.Name = "btnNewBan";
             btnNewBan.Size = new Size(80, 25);
             btnNewBan.TabIndex = 12;
@@ -278,9 +284,10 @@
             // 
             btnDeleteBan.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnDeleteBan.BackColor = Color.FromArgb(220, 53, 69);
+            btnDeleteBan.FlatAppearance.BorderColor = SystemColors.ActiveCaptionText;
             btnDeleteBan.FlatStyle = FlatStyle.Flat;
             btnDeleteBan.ForeColor = Color.White;
-            btnDeleteBan.Location = new Point(177, 241);
+            btnDeleteBan.Location = new Point(181, 237);
             btnDeleteBan.Name = "btnDeleteBan";
             btnDeleteBan.Size = new Size(80, 25);
             btnDeleteBan.TabIndex = 11;
@@ -292,34 +299,16 @@
             // 
             btnSaveBan.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnSaveBan.BackColor = Color.FromArgb(0, 122, 204);
+            btnSaveBan.FlatAppearance.BorderColor = SystemColors.ActiveCaptionText;
             btnSaveBan.FlatStyle = FlatStyle.Flat;
             btnSaveBan.ForeColor = Color.White;
-            btnSaveBan.Location = new Point(91, 241);
+            btnSaveBan.Location = new Point(95, 237);
             btnSaveBan.Name = "btnSaveBan";
             btnSaveBan.Size = new Size(80, 25);
             btnSaveBan.TabIndex = 10;
             btnSaveBan.Text = "Sửa";
             btnSaveBan.UseVisualStyleBackColor = false;
             btnSaveBan.Click += btnSaveBan_Click;
-            // 
-            // cmbTrangThaiBan
-            // 
-            cmbTrangThaiBan.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbTrangThaiBan.FormattingEnabled = true;
-            cmbTrangThaiBan.Items.AddRange(new object[] { "0 - Đang có người", "1 - Trống", "2 - Bảo trì" });
-            cmbTrangThaiBan.Location = new Point(765, 12);
-            cmbTrangThaiBan.Name = "cmbTrangThaiBan";
-            cmbTrangThaiBan.Size = new Size(150, 23);
-            cmbTrangThaiBan.TabIndex = 9;
-            // 
-            // lblTrangThaiBan
-            // 
-            lblTrangThaiBan.AutoSize = true;
-            lblTrangThaiBan.Location = new Point(690, 15);
-            lblTrangThaiBan.Name = "lblTrangThaiBan";
-            lblTrangThaiBan.Size = new Size(62, 15);
-            lblTrangThaiBan.TabIndex = 8;
-            lblTrangThaiBan.Text = "Trạng thái:";
             // 
             // txtGiaTheoGio
             // 
@@ -416,13 +405,13 @@
             tabPageThanhVien.Location = new Point(4, 24);
             tabPageThanhVien.Name = "tabPageThanhVien";
             tabPageThanhVien.Padding = new Padding(3);
-            tabPageThanhVien.Size = new Size(999, 272);
+            tabPageThanhVien.Size = new Size(999, 268);
             tabPageThanhVien.TabIndex = 1;
             tabPageThanhVien.Text = "Thông tin thành viên";
             // 
             // btnNap
             // 
-            btnNap.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnNap.Anchor = AnchorStyles.Left;
             btnNap.BackColor = Color.Yellow;
             btnNap.FlatStyle = FlatStyle.Flat;
             btnNap.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -599,7 +588,7 @@
             // 
             btnBoChontv.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnBoChontv.BackColor = Color.Silver;
-            btnBoChontv.FlatAppearance.BorderColor = Color.White;
+            btnBoChontv.FlatAppearance.BorderColor = Color.Black;
             btnBoChontv.FlatStyle = FlatStyle.Flat;
             btnBoChontv.ForeColor = Color.Black;
             btnBoChontv.Location = new Point(266, 241);
@@ -614,6 +603,7 @@
             // 
             btnThemTV.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnThemTV.BackColor = Color.FromArgb(40, 167, 69);
+            btnThemTV.FlatAppearance.BorderColor = Color.Black;
             btnThemTV.FlatStyle = FlatStyle.Flat;
             btnThemTV.ForeColor = Color.White;
             btnThemTV.Location = new Point(8, 241);
@@ -629,6 +619,7 @@
             btnXoaTV.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnXoaTV.BackColor = Color.FromArgb(220, 53, 69);
             btnXoaTV.Enabled = false;
+            btnXoaTV.FlatAppearance.BorderColor = Color.Black;
             btnXoaTV.FlatStyle = FlatStyle.Flat;
             btnXoaTV.ForeColor = Color.White;
             btnXoaTV.Location = new Point(180, 241);
@@ -644,6 +635,7 @@
             btnSuaTV.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnSuaTV.BackColor = Color.FromArgb(0, 122, 204);
             btnSuaTV.Enabled = false;
+            btnSuaTV.FlatAppearance.BorderColor = Color.Black;
             btnSuaTV.FlatStyle = FlatStyle.Flat;
             btnSuaTV.ForeColor = Color.White;
             btnSuaTV.Location = new Point(94, 241);
@@ -658,35 +650,35 @@
             // 
             dataGridView1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.BackgroundColor = Color.White;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = SystemColors.Window;
-            dataGridViewCellStyle5.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
-            dataGridView1.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
             dataGridView1.Location = new Point(352, 53);
             dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = SystemColors.Control;
-            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dataGridView1.Size = new Size(636, 213);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellClick += dataGridView1_CellClick;
@@ -694,9 +686,10 @@
             // statusStrip
             // 
             statusStrip.BackColor = Color.FromArgb(240, 248, 255);
+            statusStrip.Dock = DockStyle.Top;
             statusStrip.Font = new Font("Segoe UI", 9F);
             statusStrip.Items.AddRange(new ToolStripItem[] { lblUserName, lblUserRole, lblDateTime });
-            statusStrip.Location = new Point(0, 664);
+            statusStrip.Location = new Point(0, 0);
             statusStrip.Name = "statusStrip";
             statusStrip.Size = new Size(1007, 24);
             statusStrip.TabIndex = 3;
@@ -750,7 +743,7 @@
             panel3.Dock = DockStyle.Top;
             panel3.Location = new Point(0, 0);
             panel3.Name = "panel3";
-            panel3.Size = new Size(1007, 27);
+            panel3.Size = new Size(1007, 24);
             panel3.TabIndex = 4;
             // 
             // menuStrip1
@@ -801,12 +794,24 @@
             // 
             // pnHienThi
             // 
-            pnHienThi.BackColor = Color.IndianRed;
+            pnHienThi.BackColor = Color.White;
+            pnHienThi.Controls.Add(groupBox1);
+            pnHienThi.Controls.Add(tableLayoutPanel1);
+            pnHienThi.Controls.Add(panel1);
             pnHienThi.Dock = DockStyle.Fill;
-            pnHienThi.Location = new Point(0, 0);
+            pnHienThi.Location = new Point(0, 24);
             pnHienThi.Name = "pnHienThi";
-            pnHienThi.Size = new Size(1007, 688);
+            pnHienThi.Size = new Size(1007, 638);
             pnHienThi.TabIndex = 5;
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(statusStrip);
+            panel2.Dock = DockStyle.Bottom;
+            panel2.Location = new Point(0, 662);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(1007, 26);
+            panel2.TabIndex = 6;
             // 
             // frmTrangChu
             // 
@@ -814,12 +819,9 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1007, 688);
-            Controls.Add(panel1);
-            Controls.Add(panel3);
-            Controls.Add(statusStrip);
-            Controls.Add(groupBox1);
-            Controls.Add(tableLayoutPanel1);
             Controls.Add(pnHienThi);
+            Controls.Add(panel2);
+            Controls.Add(panel3);
             MainMenuStrip = menuStrip1;
             Name = "frmTrangChu";
             Text = "Form2";
@@ -840,8 +842,10 @@
             panel3.PerformLayout();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            pnHienThi.ResumeLayout(false);
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -860,8 +864,6 @@
         private TextBox txtLoaiBan;
         private Label lblGiaTheoGio;
         private TextBox txtGiaTheoGio;
-        private Label lblTrangThaiBan;
-        private ComboBox cmbTrangThaiBan;
         private Button btnSaveBan;
         private Button btnDeleteBan;
         private Button btnNewBan;
@@ -910,5 +912,6 @@
         private Button btnDatBan;
         private Button btnBaoTri;
         private Button button1;
+        private Panel panel2;
     }
 }
