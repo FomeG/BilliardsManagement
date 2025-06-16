@@ -50,9 +50,7 @@ namespace WinFormsApp1
             dataGridView1.Columns.Add("DonGia", "Đơn giá");
             dataGridView1.Columns.Add("ThanhTien", "Thành tiền");
 
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.MultiSelect = false;
+
         }
 
         private void SetupTimer()

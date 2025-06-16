@@ -2,6 +2,7 @@
 using Models.HandleData;
 using Models.Models;
 using System.Data;
+using System.Linq;
 
 namespace WinFormsApp1
 {
@@ -9,7 +10,6 @@ namespace WinFormsApp1
     {
         private TaiKhoan currentUser;
         private DaDBContext dbContext;
-        private System.Windows.Forms.Timer? searchTimer;
         private Ban? currentSelectedBan; // Lưu thông tin bàn hiện tại được chọn
         private System.Windows.Forms.Timer? phienChoiCheckTimer; // Timer để check phiên chơi hết hạn
 
@@ -30,10 +30,11 @@ namespace WinFormsApp1
             // Thiết lập menu navigation
             SetupMenuNavigation();
 
-            // Đảm bảo hiển thị trang chủ ban đầu
             ShowHomePageControls();
         }
 
+
+        // setup thông tin người dùng trên giao diện
         private void SetupUserInterface()
         {
             btnSaveBan.Enabled = false; // Tắt nút Cập nhật
@@ -69,7 +70,6 @@ namespace WinFormsApp1
 
         private void SetupResponsiveLayout()
         {
-            // Thêm event handler cho form resize
             this.Resize += Form2_Resize;
             this.Load += Form2_Load;
         }
@@ -169,8 +169,6 @@ namespace WinFormsApp1
             // Setup TabControl event để handle resize
             SetupTabControlEvents();
 
-            // Setup search functionality
-            SetupSearchFunctionality();
         }
 
         private void SetupTabControlEvents()
@@ -402,6 +400,10 @@ namespace WinFormsApp1
                     break;
                 case 2: // Bàn bảo trì - có thể thêm xử lý sau
 
+                    ShowBanTrongOptions(ban);
+
+
+
                     btnDeleteBan.Enabled = true; // Bật nút Xóa bàn
                     btnSaveBan.Enabled = true; // Bật nút Cập nhật thông tin bàn
                     btnNewBan.Enabled = false; // Tắt nút Thêm mới khi đã chọn bàn
@@ -427,25 +429,51 @@ namespace WinFormsApp1
 
         private void ShowBanTrongOptions(Ban ban)
         {
-            // Lưu thông tin bàn hiện tại
-            currentSelectedBan = ban;
 
-            // Xóa nội dung hiện tại trong pnChiTiet
-            pnChiTiet.Controls.Clear();
+            if (ban.TrangThai != 2)
+            {
+                // Lưu thông tin bàn hiện tại
+                currentSelectedBan = ban;
 
-            // Hiển thị và bật nút đặt bàn và bảo trì
-            btnDatBan.Visible = true;
-            btnDatBan.Enabled = true;
-            btnDatBan.Text = $"Đặt bàn {ban.TenBan}";
+                // Xóa nội dung hiện tại trong pnChiTiet
+                pnChiTiet.Controls.Clear();
 
-            btnBaoTri.Visible = true;
-            btnBaoTri.Enabled = true;
-            btnBaoTri.Text = $"Bảo trì {ban.TenBan}";
+                // Hiển thị và bật nút đặt bàn và bảo trì
+                btnDatBan.Visible = true;
+                btnDatBan.Enabled = true;
+                btnDatBan.Text = $"Đặt bàn {ban.TenBan}";
+
+                btnBaoTri.Visible = true;
+                btnBaoTri.Enabled = true;
+                btnBaoTri.Text = $"Bảo trì {ban.TenBan}";
 
 
-            // Thêm lại các nút vào panel
-            pnChiTiet.Controls.Add(btnDatBan);
-            pnChiTiet.Controls.Add(btnBaoTri);
+                // Thêm lại các nút vào panel
+                pnChiTiet.Controls.Add(btnDatBan);
+                pnChiTiet.Controls.Add(btnBaoTri);
+            }
+            else
+            {
+                // Lưu thông tin bàn hiện tại
+                currentSelectedBan = ban;
+
+                // Xóa nội dung hiện tại trong pnChiTiet
+                pnChiTiet.Controls.Clear();
+
+                // Hiển thị và bật nút đặt bàn và bảo trì
+                btnDatBan.Visible = true;
+                btnDatBan.Enabled = false;
+                btnDatBan.Text = $"Bàn này đang được bảo trì";
+
+                btnBaoTri.Visible = false;
+                btnBaoTri.Enabled = false;
+                btnBaoTri.Text = $"Bảo trì {ban.TenBan}";
+
+
+                // Thêm lại các nút vào panel
+                pnChiTiet.Controls.Add(btnDatBan);
+                pnChiTiet.Controls.Add(btnBaoTri);
+            }
         }
 
         private void ShowThongTinDichVu(Ban ban)
@@ -491,7 +519,7 @@ namespace WinFormsApp1
             };
         }
 
-        public async Task RefreshBanData()
+        public async Task ReloadDulieuBan()
         {
             // Phương thức để refresh lại dữ liệu bàn
             // Sử dụng context riêng để tránh conflict với UI thread
@@ -513,7 +541,7 @@ namespace WinFormsApp1
                 pnChiTiet.Controls.Clear();
 
                 // Refresh dữ liệu bàn trên UI thread
-                await RefreshBanData();
+                await ReloadDulieuBan();
             }
             catch (Exception ex)
             {
@@ -536,7 +564,7 @@ namespace WinFormsApp1
                 pnChiTiet.Controls.Clear();
 
                 // Refresh dữ liệu bàn trên UI thread
-                await RefreshBanData();
+                await ReloadDulieuBan();
             }
             catch (Exception ex)
             {
@@ -582,7 +610,7 @@ namespace WinFormsApp1
                             "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         // Refresh dữ liệu và xóa panel
-                        await RefreshBanData();
+                        await ReloadDulieuBan();
                         pnChiTiet.Controls.Clear();
                     }
                 }
@@ -669,12 +697,12 @@ namespace WinFormsApp1
                     {
                         this.Invoke(new Action(() =>
                         {
-                            _ = Task.Run(async () => await RefreshBanData());
+                            _ = Task.Run(async () => await ReloadDulieuBan());
                         }));
                     }
                     else
                     {
-                        await RefreshBanData();
+                        await ReloadDulieuBan();
                     }
 
                     // Thông báo cho user (tùy chọn)
@@ -692,33 +720,7 @@ namespace WinFormsApp1
 
         #region Search Functionality
 
-        private void SetupSearchFunctionality()
-        {
-            // Setup search timer for debouncing
-            searchTimer = new System.Windows.Forms.Timer();
-            searchTimer.Interval = 300; // 300ms delay
-            searchTimer.Tick += SearchTimer_Tick;
-
-            // Add event handler for search textbox
-            txtTimKiem.TextChanged += TxtTimKiem_TextChanged;
-            txtTimKiem.PlaceholderText = "Tìm kiếm theo tên, địa chỉ, số điện thoại...";
-        }
-
-        private void TxtTimKiem_TextChanged(object sender, EventArgs e)
-        {
-            // Stop previous timer and start new one (debouncing)
-            searchTimer.Stop();
-            searchTimer.Start();
-        }
-
-        private async void SearchTimer_Tick(object sender, EventArgs e)
-        {
-            // Stop timer and perform search
-            searchTimer.Stop();
-            await PerformSearch(txtTimKiem.Text.Trim());
-        }
-
-        private async Task PerformSearch(string searchText)
+        private async Task TimKiemKH(string searchText)
         {
             try
             {
@@ -732,7 +734,6 @@ namespace WinFormsApp1
                     }
                     else
                     {
-                        // Tìm kiếm bằng tên, sdt, địa chỉ
                         khachHangs = await searchContext.KhachHangs
                             .Where(k => k.HoTen.Contains(searchText) ||
                                        k.DiaChi.Contains(searchText) ||
@@ -742,7 +743,6 @@ namespace WinFormsApp1
                     }
                 }
 
-                // Update DataGridView with search results
                 UpdateDataGridViewWithResults(khachHangs);
             }
             catch (Exception ex)
@@ -753,10 +753,8 @@ namespace WinFormsApp1
 
         private void UpdateDataGridViewWithResults(List<KhachHang> khachHangs)
         {
-            // Clear existing data
             dataGridView1.Rows.Clear();
 
-            // Add search results
             foreach (var k in khachHangs)
             {
                 dataGridView1.Rows.Add(
@@ -786,10 +784,8 @@ namespace WinFormsApp1
         {
             try
             {
-                // Setup DataGridView columns first
                 SetupDataGridViewColumns();
 
-                // Load all data initially using separate context
                 using (var loadContext = new DaDBContext())
                 {
                     var khachHangs = await loadContext.KhachHangs.OrderBy(k => k.ID).ToListAsync();
@@ -808,14 +804,9 @@ namespace WinFormsApp1
         {
             if (dataGridView1.Columns.Count == 0)
             {
-                // Clear any existing columns and data
                 dataGridView1.Columns.Clear();
                 dataGridView1.Rows.Clear();
-
-                // Disable auto-generate columns
                 dataGridView1.AutoGenerateColumns = false;
-
-                // Add columns manually
                 dataGridView1.Columns.Add(new DataGridViewTextBoxColumn
                 {
                     Name = "ID",
@@ -877,51 +868,13 @@ namespace WinFormsApp1
                     FillWeight = 15
                 });
 
-                // cài đặt các thuộc tính của datagridview
-                dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                dataGridView1.MultiSelect = false;
-                dataGridView1.AllowUserToAddRows = false;
-                dataGridView1.AllowUserToDeleteRows = false;
-                dataGridView1.ReadOnly = true;
 
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-                dataGridView1.ScrollBars = ScrollBars.Both;
-                dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 
 
             }
         }
 
 
-
-        private async void LoadThanhVienToForm(DataGridViewRow row)
-        {
-            try
-            {
-                if (row.Cells["ID"].Value != null)
-                {
-                    int khachHangId = Convert.ToInt32(row.Cells["ID"].Value);
-                    var khachHang = await dbContext.KhachHangs.FindAsync(khachHangId);
-
-                    if (khachHang != null)
-                    {
-                        textBox1.Text = khachHang.ID.ToString();
-                        txtTenThanhVien.Text = khachHang.HoTen;
-                        rdNam.Checked = khachHang.GioiTinh;
-                        rdNu.Checked = !khachHang.GioiTinh;
-                        dateTimePicker1.Value = khachHang.NgaySinh;
-                        txtSDT.Text = khachHang.SoDienThoai;
-                        txtDiaChi.Text = khachHang.DiaChi ?? string.Empty;
-                        txtGioConLai.Text = khachHang.SoTienConLai.ToString();
-                        lblNgayDangKy.Text = khachHang.NgayDangKy.ToString("dd/MM/yyyy HH:mm");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi khi load thông tin thành viên: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         #endregion
 
@@ -929,7 +882,7 @@ namespace WinFormsApp1
 
         private async void btnSaveBan_Click(object sender, EventArgs e)
         {
-            if (!CheckAdminPermission("cập nhật thông tin bàn"))
+            if (!CheckQuyen("cập nhật thông tin bàn"))
                 return;
 
             try
@@ -956,7 +909,7 @@ namespace WinFormsApp1
                     MessageBox.Show("Cập nhật thông tin bàn thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     // Refresh lại danh sách bàn
-                    await RefreshBanData();
+                    await ReloadDulieuBan();
                 }
             }
             catch (Exception ex)
@@ -967,7 +920,7 @@ namespace WinFormsApp1
 
         private async void btnDeleteBan_Click(object sender, EventArgs e)
         {
-            if (!CheckAdminPermission("xóa bàn"))
+            if (!CheckQuyen("xóa bàn"))
                 return;
 
             try
@@ -994,8 +947,8 @@ namespace WinFormsApp1
                         MessageBox.Show("Xóa bàn thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         // Clear form và refresh danh sách
-                        ClearBanForm();
-                        await RefreshBanData();
+                        XoaFormBan();
+                        await ReloadDulieuBan();
                     }
                 }
             }
@@ -1007,7 +960,7 @@ namespace WinFormsApp1
 
         private async void btnNewBan_Click(object sender, EventArgs e)
         {
-            if (!CheckAdminPermission("thêm bàn mới"))
+            if (!CheckQuyen("thêm bàn mới"))
                 return;
 
             try
@@ -1024,7 +977,7 @@ namespace WinFormsApp1
                     TenBan = txtTenBan.Text.Trim(),
                     LoaiBan = txtLoaiBan.Text.Trim(),
                     GiaTheoGio = decimal.Parse(txtGiaTheoGio.Text),
-                    TrangThai = 1 // Mặc định là trống (bàn mới tạo thì cứ để trống nhưu vậy, ai dặt thì đặt)
+                    TrangThai = 1
                 };
 
                 dbContext.Bans.Add(newBan);
@@ -1033,8 +986,8 @@ namespace WinFormsApp1
                 MessageBox.Show("Thêm bàn mới thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // xóa dữ liệu trên ô txtbox và tải lại dữ liệu 
-                ClearBanForm();
-                await RefreshBanData();
+                XoaFormBan();
+                await ReloadDulieuBan();
             }
             catch (Exception ex)
             {
@@ -1042,7 +995,7 @@ namespace WinFormsApp1
             }
         }
 
-        private void ClearBanForm()
+        private void XoaFormBan()
         {
             txtBanID.Clear();
             txtTenBan.Clear();
@@ -1055,10 +1008,7 @@ namespace WinFormsApp1
 
         private void btnBoChon_Click(object sender, EventArgs e)
         {
-            // Xóa hết thông tin trên form bàn (bỏ chọn)
-            ClearBanForm();
-
-            // Thông báo cho người dùng (tùy chọn)
+            XoaFormBan();
             // MessageBox.Show("Đã bỏ chọn bàn!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -1066,14 +1016,71 @@ namespace WinFormsApp1
 
         #region Tab Thanh Vien Event Handlers
 
+        private bool ValidateSoDienThoai(string soDienThoai)
+        {
+            // Kiểm tra null hoặc empty
+            if (string.IsNullOrWhiteSpace(soDienThoai))
+            {
+                MessageBox.Show("Vui lòng nhập số điện thoại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            // Loại bỏ khoảng trắng
+            soDienThoai = soDienThoai.Trim();
+
+            // Kiểm tra độ dài (10-11 số)
+            if (soDienThoai.Length < 10 || soDienThoai.Length > 11)
+            {
+                MessageBox.Show("Số điện thoại phải có 10-11 chữ số!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            // Kiểm tra chỉ chứa số
+            if (!soDienThoai.All(char.IsDigit))
+            {
+                MessageBox.Show("Số điện thoại chỉ được chứa các chữ số!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            // Kiểm tra đầu số hợp lệ (bắt đầu bằng 0)
+            if (!soDienThoai.StartsWith("0"))
+            {
+                MessageBox.Show("Số điện thoại phải bắt đầu bằng số 0!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            // Kiểm tra các đầu số phổ biến tại Việt Nam
+            string[] validPrefixes = { "032", "033", "034", "035", "036", "037", "038", "039", // Viettel
+                                     "070", "079", "077", "076", "078", // Mobifone
+                                     "083", "084", "085", "081", "082", // Vinaphone
+                                     "056", "058", // Vietnamobile
+                                     "059", // Gmobile
+                                     "090", "093", "089" }; // Các mạng khác
+
+            bool hasValidPrefix = validPrefixes.Any(prefix => soDienThoai.StartsWith(prefix));
+            if (!hasValidPrefix)
+            {
+                MessageBox.Show("Đầu số điện thoại không hợp lệ!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            return true;
+        }
+
         private async void btnThemTV_Click(object sender, EventArgs e)
         {
             try
             {
                 // Validate input
-                if (string.IsNullOrEmpty(txtTenThanhVien.Text) || string.IsNullOrEmpty(txtSDT.Text))
+                if (string.IsNullOrEmpty(txtTenThanhVien.Text.Trim()))
                 {
-                    MessageBox.Show("Vui lòng nhập đầy đủ họ tên và số điện thoại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Vui lòng nhập họ tên!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Validate số điện thoại
+                if (!ValidateSoDienThoai(txtSDT.Text))
+                {
                     return;
                 }
 
@@ -1102,7 +1109,7 @@ namespace WinFormsApp1
 
                 // Clear form và refresh danh sách
                 ClearThanhVienForm();
-                await RefreshThanhVienData();
+                await RefreshDuLieuKH();
             }
             catch (Exception ex)
             {
@@ -1112,7 +1119,7 @@ namespace WinFormsApp1
 
         private async void btnSuaTV_Click(object sender, EventArgs e)
         {
-            if (!CheckAdminPermission("cập nhật thông tin thành viên"))
+            if (!CheckQuyen("cập nhật thông tin thành viên"))
                 return;
 
             try
@@ -1128,6 +1135,19 @@ namespace WinFormsApp1
 
                 if (khachHang != null)
                 {
+                    // Validate họ tên
+                    if (string.IsNullOrEmpty(txtTenThanhVien.Text.Trim()))
+                    {
+                        MessageBox.Show("Vui lòng nhập họ tên!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    // Validate số điện thoại
+                    if (!ValidateSoDienThoai(txtSDT.Text))
+                    {
+                        return;
+                    }
+
                     // Check if phone number already exists (exclude current record)
                     bool phoneExists = await dbContext.KhachHangs.AnyAsync(k => k.SoDienThoai == txtSDT.Text.Trim() && k.ID != khachHangId);
                     if (phoneExists)
@@ -1149,7 +1169,7 @@ namespace WinFormsApp1
                     MessageBox.Show("Cập nhật thông tin thành viên thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     // Refresh lại danh sách
-                    await RefreshThanhVienData();
+                    await RefreshDuLieuKH();
                 }
             }
             catch (Exception ex)
@@ -1160,7 +1180,7 @@ namespace WinFormsApp1
 
         private async void btnXoaTV_Click(object sender, EventArgs e)
         {
-            if (!CheckAdminPermission("xóa thành viên"))
+            if (!CheckQuyen("xóa thành viên"))
                 return;
 
             try
@@ -1186,7 +1206,7 @@ namespace WinFormsApp1
 
                         // Clear form và refresh danh sách
                         ClearThanhVienForm();
-                        await RefreshThanhVienData();
+                        await RefreshDuLieuKH();
                     }
                 }
             }
@@ -1222,21 +1242,16 @@ namespace WinFormsApp1
             dataGridView1.ClearSelection();
         }
 
-        private async Task RefreshThanhVienData()
+        private async Task RefreshDuLieuKH()
         {
-            // Refresh data based on current search text
             string currentSearch = txtTimKiem.Text.Trim();
-            await PerformSearch(currentSearch);
+            await TimKiemKH(currentSearch);
         }
 
         #endregion
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            // Giải phóng resources khi form đóng
-            searchTimer?.Stop();
-            searchTimer?.Dispose();
-
             phienChoiCheckTimer?.Stop();
             phienChoiCheckTimer?.Dispose();
 
@@ -1253,8 +1268,33 @@ namespace WinFormsApp1
         {
             if (dataGridView1.SelectedRows.Count > 0)
             {
-                var selectedRow = dataGridView1.SelectedRows[0];
-                LoadThanhVienToForm(selectedRow);
+                var dong = dataGridView1.Rows[e.RowIndex];
+
+                if (e.RowIndex >= 0)
+                {
+
+                    textBox1.Text = dong.Cells[0].Value.ToString();
+                    txtTenThanhVien.Text = dong.Cells[1].Value.ToString();
+
+                    if (dong.Cells[2].Value.ToString() == "Nam")
+                    {
+                        rdNam.Checked = true;
+                    }
+                    else
+                    {
+                        rdNu.Checked = true;
+                    }
+
+
+                    dateTimePicker1.Value = DateTime.ParseExact(dong.Cells[3].Value.ToString(), "dd/MM/yyyy", null);
+                    txtSDT.Text = dong.Cells[4].Value.ToString();
+                    txtDiaChi.Text = dong.Cells[5].Value.ToString() ?? string.Empty;
+                    txtGioConLai.Text = dong.Cells[7].Value.ToString();
+                    lblNgayDangKy.Text = dong.Cells[6].Value.ToString();
+
+
+
+                }
 
                 // Khi chọn dữ liệu: disable nút Thêm, enable nút Sửa và Xóa
                 btnThemTV.Enabled = false;
@@ -1295,7 +1335,7 @@ namespace WinFormsApp1
                         // Mở form nạp tiền với callback để refresh dữ liệu và reset form
                         var frmNap = new frmNapTien(khachHang, currentUser, async () =>
                         {
-                            await RefreshThanhVienData();
+                            await RefreshDuLieuKH();
                             // Reset form thành viên để hiển thị dữ liệu mới nhất
                             ClearThanhVienForm();
                         });
@@ -1341,7 +1381,7 @@ namespace WinFormsApp1
 
         private void ĐồĂnThứcUốngToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (CheckAdminPermission("quản lý sản phẩm"))
+            if (CheckQuyen("quản lý sản phẩm"))
             {
                 ShowSanPhamForm();
             }
@@ -1349,7 +1389,7 @@ namespace WinFormsApp1
 
         private void ThốngKêToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (CheckAdminPermission("xem thống kê doanh thu"))
+            if (CheckQuyen("xem thống kê doanh thu"))
             {
                 ShowThongKeForm();
             }
@@ -1357,7 +1397,7 @@ namespace WinFormsApp1
 
         private void QuảnLýTàiKhoảnToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (CheckAdminPermission("quản lý tài khoản"))
+            if (CheckQuyen("quản lý tài khoản"))
             {
                 ShowQuanLyTaiKhoanForm();
             }
@@ -1447,7 +1487,7 @@ namespace WinFormsApp1
             groupBox1.Visible = false;
         }
 
-        private bool CheckAdminPermission(string feature)
+        private bool CheckQuyen(string feature)
         {
             if (currentUser.VaiTro != "Admin")
             {
@@ -1476,6 +1516,10 @@ namespace WinFormsApp1
             }
         }
 
+
+
+
+        // nút hoàn tất bảo trì bàn
         private async void button2_Click(object sender, EventArgs e)
         {
             if (currentSelectedBan != null)
@@ -1498,7 +1542,7 @@ namespace WinFormsApp1
                                 "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                             // Refresh dữ liệu và xóa panel
-                            await RefreshBanData();
+                            await ReloadDulieuBan();
                             pnChiTiet.Controls.Clear();
                         }
                     }
@@ -1508,6 +1552,37 @@ namespace WinFormsApp1
                     MessageBox.Show($"Lỗi khi cập nhật trạng thái bàn: {ex.Message}",
                         "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+
+        private async void txtTimKiem_TextChanged_1(object sender, EventArgs e)
+        {
+            try
+            {
+                List<KhachHang> khachHangs;
+
+                using (var searchContext = new DaDBContext())
+                {
+                    if (string.IsNullOrEmpty(txtTimKiem.Text))
+                    {
+                        khachHangs = await searchContext.KhachHangs.OrderBy(k => k.ID).ToListAsync();
+                    }
+                    else
+                    {
+                        khachHangs = await searchContext.KhachHangs
+                            .Where(k => k.HoTen.Contains(txtTimKiem.Text) ||
+                                       k.DiaChi.Contains(txtTimKiem.Text) ||
+                                       k.SoDienThoai.Contains(txtTimKiem.Text))
+                            .OrderBy(k => k.ID)
+                            .ToListAsync();
+                    }
+                }
+
+                UpdateDataGridViewWithResults(khachHangs);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi tìm kiếm: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

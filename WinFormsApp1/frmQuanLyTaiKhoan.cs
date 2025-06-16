@@ -88,11 +88,7 @@ namespace WinFormsApp1
                     AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
                 });
 
-                dgvTaiKhoan.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                dgvTaiKhoan.MultiSelect = false;
-                dgvTaiKhoan.AllowUserToAddRows = false;
-                dgvTaiKhoan.AllowUserToDeleteRows = false;
-                dgvTaiKhoan.ReadOnly = true;
+
 
                 dgvTaiKhoan.SelectionChanged += DgvTaiKhoan_SelectionChanged;
             }

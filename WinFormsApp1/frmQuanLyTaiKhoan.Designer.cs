@@ -59,6 +59,11 @@ namespace WinFormsApp1
             dgvTaiKhoan.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvTaiKhoan.Location = new Point(12, 12);
             dgvTaiKhoan.Name = "dgvTaiKhoan";
+            dgvTaiKhoan.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvTaiKhoan.MultiSelect = false;
+            dgvTaiKhoan.AllowUserToAddRows = false;
+            dgvTaiKhoan.AllowUserToDeleteRows = false;
+            dgvTaiKhoan.ReadOnly = true;
             dgvTaiKhoan.Size = new Size(840, 360);
             dgvTaiKhoan.TabIndex = 0;
             // 

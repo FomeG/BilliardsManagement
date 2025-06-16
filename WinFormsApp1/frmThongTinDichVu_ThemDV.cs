@@ -46,7 +46,6 @@ namespace WinFormsApp1
 
             // Ẩn cột ID
             dataGridView1.Columns["ID"].Visible = false;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
         private async void LoadSanPhamData()

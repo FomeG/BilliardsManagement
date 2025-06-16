@@ -71,6 +71,11 @@
             dgvSanPham.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvSanPham.Location = new Point(12, 12);
             dgvSanPham.Name = "dgvSanPham";
+            dgvSanPham.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvSanPham.MultiSelect = false;
+            dgvSanPham.AllowUserToAddRows = false;
+            dgvSanPham.AllowUserToDeleteRows = false;
+            dgvSanPham.ReadOnly = true;
             dgvSanPham.Size = new Size(776, 250);
             dgvSanPham.TabIndex = 0;
             // 

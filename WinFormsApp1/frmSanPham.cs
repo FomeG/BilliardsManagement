@@ -86,11 +86,7 @@ namespace WinFormsApp1
                     AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
                 });
 
-                dgvSanPham.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                dgvSanPham.MultiSelect = false;
-                dgvSanPham.AllowUserToAddRows = false;
-                dgvSanPham.AllowUserToDeleteRows = false;
-                dgvSanPham.ReadOnly = true;
+
 
                 dgvSanPham.SelectionChanged += DgvSanPham_SelectionChanged;
             }
