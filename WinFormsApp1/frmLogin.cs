@@ -24,9 +24,6 @@ namespace WinFormsApp1
             // Thiết lập mật khẩu ẩn
             matkhau.PasswordChar = '*';
 
-            // Gán sự kiện cho nút đăng nhập
-            button1.Click += Button1_Click;
-
             // Cho phép nhấn Enter để đăng nhập
             this.KeyPreview = true;
             this.KeyDown += Form1_KeyDown;
@@ -195,11 +192,11 @@ namespace WinFormsApp1
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Button1_Click(sender ?? this, e);
+                button1_Click_1(sender ?? this, e);
             }
         }
 
-        private async void Button1_Click(object sender, EventArgs e)
+        private async void button1_Click_1(object sender, EventArgs e)
         {
             string username = taikhoan.Text.Trim();
             string password = matkhau.Text.Trim();
@@ -272,11 +269,6 @@ namespace WinFormsApp1
                 button1.Enabled = true;
                 button1.Text = "Đăng nhập";
             }
-        }
-
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-
         }
 
         private void LinkForgotPassword_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

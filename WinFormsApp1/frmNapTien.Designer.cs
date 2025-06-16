@@ -34,38 +34,38 @@
             txtSoTienNap = new TextBox();
             btnNapTien = new Button();
             SuspendLayout();
-            //
+            // 
             // lblKhachHang
-            //
+            // 
             lblKhachHang.AutoSize = true;
             lblKhachHang.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblKhachHang.Location = new Point(12, 9);
             lblKhachHang.Name = "lblKhachHang";
-            lblKhachHang.Size = new Size(75, 15);
+            lblKhachHang.Size = new Size(74, 15);
             lblKhachHang.TabIndex = 0;
             lblKhachHang.Text = "Khách hàng:";
-            //
+            // 
             // lblSoTienHienTai
-            //
+            // 
             lblSoTienHienTai.AutoSize = true;
             lblSoTienHienTai.ForeColor = Color.Blue;
             lblSoTienHienTai.Location = new Point(12, 30);
             lblSoTienHienTai.Name = "lblSoTienHienTai";
-            lblSoTienHienTai.Size = new Size(95, 15);
+            lblSoTienHienTai.Size = new Size(88, 15);
             lblSoTienHienTai.TabIndex = 1;
             lblSoTienHienTai.Text = "Số tiền hiện tại:";
-            //
+            // 
             // label1
-            //
+            // 
             label1.AutoSize = true;
             label1.Location = new Point(12, 55);
             label1.Name = "label1";
             label1.Size = new Size(119, 15);
             label1.TabIndex = 2;
             label1.Text = "Nhập số tiền cần nạp";
-            //
+            // 
             // txtSoTienNap
-            //
+            // 
             txtSoTienNap.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             txtSoTienNap.Location = new Point(12, 73);
             txtSoTienNap.Name = "txtSoTienNap";
@@ -73,9 +73,9 @@
             txtSoTienNap.Size = new Size(260, 23);
             txtSoTienNap.TabIndex = 3;
             txtSoTienNap.TextAlign = HorizontalAlignment.Right;
-            //
+            // 
             // btnNapTien
-            //
+            // 
             btnNapTien.BackColor = Color.FromArgb(46, 125, 50);
             btnNapTien.FlatStyle = FlatStyle.Flat;
             btnNapTien.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
@@ -86,9 +86,10 @@
             btnNapTien.TabIndex = 4;
             btnNapTien.Text = "Nạp";
             btnNapTien.UseVisualStyleBackColor = false;
-            //
+            btnNapTien.Click += btnNapTien_Click_1;
+            // 
             // frmNapTien
-            //
+            // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(284, 161);

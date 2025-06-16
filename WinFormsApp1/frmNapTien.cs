@@ -52,9 +52,6 @@ namespace WinFormsApp1
 
         private void SetupEvents()
         {
-            // Thêm event cho nút nạp tiền
-            btnNapTien.Click += BtnNapTien_Click;
-
             // Thêm event cho Enter key
             txtSoTienNap.KeyPress += TxtSoTienNap_KeyPress;
 
@@ -72,55 +69,7 @@ namespace WinFormsApp1
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
-                BtnNapTien_Click(sender, e);
-            }
-        }
-
-        private async void BtnNapTien_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // Validate input
-                if (string.IsNullOrWhiteSpace(txtSoTienNap.Text))
-                {
-                    MessageBox.Show("Vui lòng nhập số tiền cần nạp!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtSoTienNap.Focus();
-                    return;
-                }
-
-                if (!decimal.TryParse(txtSoTienNap.Text, out decimal soTienNap) || soTienNap <= 0)
-                {
-                    MessageBox.Show("Số tiền nạp phải là số dương!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtSoTienNap.Focus();
-                    return;
-                }
-
-                if (soTienNap > 10000000) // Giới hạn 10 triệu
-                {
-                    MessageBox.Show("Số tiền nạp không được vượt quá 10,000,000 VNĐ!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtSoTienNap.Focus();
-                    return;
-                }
-
-                // Xác nhận nạp tiền
-                var result = MessageBox.Show(
-                    $"Bạn có chắc chắn muốn nạp {soTienNap:N0} VNĐ cho khách hàng {selectedKhachHang?.HoTen}?",
-                    "Xác nhận nạp tiền",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question);
-
-                if (result == DialogResult.Yes)
-                {
-                    await ProcessNapTien(soTienNap);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Lỗi khi nạp tiền: {ex.Message}", "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                btnNapTien_Click_1(sender, e);
             }
         }
 
@@ -191,6 +140,54 @@ namespace WinFormsApp1
         {
             dbContext?.Dispose();
             base.OnFormClosed(e);
+        }
+
+        private async void btnNapTien_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                // Validate input
+                if (string.IsNullOrWhiteSpace(txtSoTienNap.Text))
+                {
+                    MessageBox.Show("Vui lòng nhập số tiền cần nạp!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtSoTienNap.Focus();
+                    return;
+                }
+
+                if (!decimal.TryParse(txtSoTienNap.Text, out decimal soTienNap) || soTienNap <= 0)
+                {
+                    MessageBox.Show("Số tiền nạp phải là số dương!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtSoTienNap.Focus();
+                    return;
+                }
+
+                if (soTienNap > 10000000) // Giới hạn 10 triệu
+                {
+                    MessageBox.Show("Số tiền nạp không được vượt quá 10,000,000 VNĐ!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtSoTienNap.Focus();
+                    return;
+                }
+
+                // Xác nhận nạp tiền
+                var result = MessageBox.Show(
+                    $"Bạn có chắc chắn muốn nạp {soTienNap:N0} VNĐ cho khách hàng {selectedKhachHang?.HoTen}?",
+                    "Xác nhận nạp tiền",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    await ProcessNapTien(soTienNap);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi nạp tiền: {ex.Message}", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

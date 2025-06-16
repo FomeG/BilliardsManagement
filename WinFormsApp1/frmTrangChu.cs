@@ -93,13 +93,58 @@ namespace WinFormsApp1
         private void EnableAdminFeatures()
         {
             // Bật các chức năng dành cho admin
-            // Ví dụ: quản lý tài khoản, báo cáo tổng hợp, etc.
+            // Menu items
+            đồĂnThứcUốngToolStripMenuItem.Visible = true;  // Quản lý sản phẩm
+            thốngKêToolStripMenuItem.Visible = true;       // Thống kê doanh thu
+            quảnLýTàiKhoảnToolStripMenuItem.Visible = true; // Quản lý tài khoản
+
+            // Buttons CRUD cho bàn (trong tab Bàn)
+            btnSaveBan.Visible = true;
+            btnDeleteBan.Visible = true;
+            btnNewBan.Visible = true;
+
+            // Buttons CRUD cho thành viên (trong tab Thành viên)
+            btnThemTV.Visible = true;
+            btnXoaTV.Visible = true;
+            btnSuaTV.Visible = true;
+
+            // Cho phép chỉnh sửa thông tin bàn và thành viên
+            txtBanID.ReadOnly = false;
+            txtTenBan.ReadOnly = false;
+            txtLoaiBan.ReadOnly = false;
+            txtGiaTheoGio.ReadOnly = false;
         }
 
         private void DisableAdminFeatures()
         {
-            // Tắt các chức năng admin
-            // Ví dụ: ẩn menu quản trị, etc.
+            // Tắt các chức năng admin - chỉ để lại tính năng cơ bản cho staff
+            // Ẩn menu items dành cho admin
+            đồĂnThứcUốngToolStripMenuItem.Visible = false;  // Không được quản lý sản phẩm
+            thốngKêToolStripMenuItem.Visible = false;       // Không được xem thống kê
+            quảnLýTàiKhoảnToolStripMenuItem.Visible = false; // Không được quản lý tài khoản
+
+            // Ẩn buttons CRUD cho bàn
+            btnSaveBan.Visible = false;
+            btnDeleteBan.Visible = false;
+            btnNewBan.Visible = false;
+
+            // Ẩn buttons CRUD cho thành viên (chỉ để lại thêm thành viên)
+            btnXoaTV.Visible = false;  // Không được xóa thành viên
+            btnSuaTV.Visible = false;  // Không được sửa thành viên
+            btnThemTV.Visible = true;  // Được phép thêm thành viên mới
+
+            // Không cho phép chỉnh sửa thông tin bàn
+            txtBanID.ReadOnly = true;
+            txtTenBan.ReadOnly = true;
+            txtLoaiBan.ReadOnly = true;
+            txtGiaTheoGio.ReadOnly = true;
+
+            // Staff vẫn có thể:
+            // - Đăng ký thành viên mới (btnThemTV)
+            // - Nạp tiền cho khách (button nạp tiền)
+            // - Đặt bàn cho khách (btnDatBan)
+            // - Xem bàn trống/đang sử dụng (tableLayoutPanel1)
+            // - Tính tiền dịch vụ (thông qua form dịch vụ)
         }
 
         private void UpdateDateTime()
@@ -316,17 +361,61 @@ namespace WinFormsApp1
 
         private void HandleBanClick(Ban ban)
         {
+
+
             // Xử lý theo trạng thái bàn
             switch (ban.TrangThai)
             {
                 case 0: // Bàn đang có người - hiển thị thông tin dịch vụ
                     ShowThongTinDichVu(ban);
+
+
+                    btnDeleteBan.Enabled = false; // Bật nút Xóa bàn
+                    btnSaveBan.Enabled = false; // Bật nút Cập nhật thông tin bàn
+                    btnNewBan.Enabled = false; // Tắt nút Thêm mới khi đã chọn bàn
+
+                    button2.Enabled = false; // tắt nút Bảo trì
+                    button2.Visible = false; // ẩn nút Bảo trì
+
+                    txtTenBan.Text = ban.TenBan;
+                    txtBanID.Text = ban.ID.ToString();
+                    txtLoaiBan.Text = ban.LoaiBan;
+                    txtGiaTheoGio.Text = ban.GiaTheoGio.ToString();
                     break;
                 case 1: // Bàn trống - hiển thị nút đặt bàn và bảo trì
                     ShowBanTrongOptions(ban);
+
+
+                    btnDeleteBan.Enabled = true; // Bật nút Xóa bàn
+                    btnSaveBan.Enabled = true; // Bật nút Cập nhật thông tin bàn
+                    btnNewBan.Enabled = false; // Tắt nút Thêm mới khi đã chọn bàn
+
+
+                    button2.Enabled = false; // tắt nút Bảo trì
+                    button2.Visible = false; // ẩn nút Bảo trì
+
+
+                    txtTenBan.Text = ban.TenBan;
+                    txtBanID.Text = ban.ID.ToString();
+                    txtLoaiBan.Text = ban.LoaiBan;
+                    txtGiaTheoGio.Text = ban.GiaTheoGio.ToString();
                     break;
                 case 2: // Bàn bảo trì - có thể thêm xử lý sau
-                    MessageBox.Show("Bàn đang trong trạng thái bảo trì!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    btnDeleteBan.Enabled = true; // Bật nút Xóa bàn
+                    btnSaveBan.Enabled = true; // Bật nút Cập nhật thông tin bàn
+                    btnNewBan.Enabled = false; // Tắt nút Thêm mới khi đã chọn bàn
+
+
+                    button2.Enabled = true; // Bật nút Bảo trì
+                    button2.Visible = true; // Hiển thị nút Bảo trì
+
+
+                    currentSelectedBan = ban; // Lưu thông tin bàn hiện tại
+                    txtTenBan.Text = ban.TenBan;
+                    txtBanID.Text = ban.ID.ToString();
+                    txtLoaiBan.Text = ban.LoaiBan;
+                    txtGiaTheoGio.Text = ban.GiaTheoGio.ToString();
                     break;
                 default:
                     // Chỉ bàn có trạng thái "không xác định" mới cho phép chỉnh sửa thông tin
@@ -482,16 +571,20 @@ namespace WinFormsApp1
 
                 if (result == DialogResult.Yes)
                 {
-                    ban.TrangThai = 2; // Bảo trì
-                    dbContext.Bans.Update(ban);
-                    await dbContext.SaveChangesAsync();
+                    // Tìm lại entity từ database để tránh tracking conflict
+                    var banToUpdate = await dbContext.Bans.FirstOrDefaultAsync(b => b.ID == ban.ID && !b.IsDeleted);
+                    if (banToUpdate != null)
+                    {
+                        banToUpdate.TrangThai = 2; // Bảo trì
+                        await dbContext.SaveChangesAsync();
 
-                    MessageBox.Show($"{ban.TenBan} đã được chuyển sang trạng thái bảo trì!",
-                        "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show($"{banToUpdate.TenBan} đã được chuyển sang trạng thái bảo trì!",
+                            "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Refresh dữ liệu và xóa panel
-                    await RefreshBanData();
-                    pnChiTiet.Controls.Clear();
+                        // Refresh dữ liệu và xóa panel
+                        await RefreshBanData();
+                        pnChiTiet.Controls.Clear();
+                    }
                 }
             }
             catch (Exception ex)
@@ -795,11 +888,11 @@ namespace WinFormsApp1
                 dataGridView1.ScrollBars = ScrollBars.Both;
                 dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 
-  
+
             }
         }
 
-  
+
 
         private async void LoadThanhVienToForm(DataGridViewRow row)
         {
@@ -836,6 +929,9 @@ namespace WinFormsApp1
 
         private async void btnSaveBan_Click(object sender, EventArgs e)
         {
+            if (!CheckAdminPermission("cập nhật thông tin bàn"))
+                return;
+
             try
             {
                 if (string.IsNullOrEmpty(txtBanID.Text))
@@ -871,6 +967,9 @@ namespace WinFormsApp1
 
         private async void btnDeleteBan_Click(object sender, EventArgs e)
         {
+            if (!CheckAdminPermission("xóa bàn"))
+                return;
+
             try
             {
                 if (string.IsNullOrEmpty(txtBanID.Text))
@@ -908,6 +1007,9 @@ namespace WinFormsApp1
 
         private async void btnNewBan_Click(object sender, EventArgs e)
         {
+            if (!CheckAdminPermission("thêm bàn mới"))
+                return;
+
             try
             {
                 // Validate input
@@ -1010,6 +1112,9 @@ namespace WinFormsApp1
 
         private async void btnSuaTV_Click(object sender, EventArgs e)
         {
+            if (!CheckAdminPermission("cập nhật thông tin thành viên"))
+                return;
+
             try
             {
                 if (string.IsNullOrEmpty(textBox1.Text))
@@ -1055,6 +1160,9 @@ namespace WinFormsApp1
 
         private async void btnXoaTV_Click(object sender, EventArgs e)
         {
+            if (!CheckAdminPermission("xóa thành viên"))
+                return;
+
             try
             {
                 if (string.IsNullOrEmpty(textBox1.Text))
@@ -1216,7 +1324,7 @@ namespace WinFormsApp1
 
         private void SetupMenuNavigation()
         {
-            // Thêm event handlers cho các menu items
+            // gắn sự kiện click cho mấy cái menu ở trên dầu teien
             trangChủToolStripMenuItem.Click += TrangChủToolStripMenuItem_Click;
             đồĂnThứcUốngToolStripMenuItem.Click += ĐồĂnThứcUốngToolStripMenuItem_Click;
             thốngKêToolStripMenuItem.Click += ThốngKêToolStripMenuItem_Click;
@@ -1233,17 +1341,26 @@ namespace WinFormsApp1
 
         private void ĐồĂnThứcUốngToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowSanPhamForm();
+            if (CheckAdminPermission("quản lý sản phẩm"))
+            {
+                ShowSanPhamForm();
+            }
         }
 
         private void ThốngKêToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowThongKeForm();
+            if (CheckAdminPermission("xem thống kê doanh thu"))
+            {
+                ShowThongKeForm();
+            }
         }
 
         private void QuảnLýTàiKhoảnToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ShowQuanLyTaiKhoanForm();
+            if (CheckAdminPermission("quản lý tài khoản"))
+            {
+                ShowQuanLyTaiKhoanForm();
+            }
         }
 
         private void ĐăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1330,6 +1447,17 @@ namespace WinFormsApp1
             groupBox1.Visible = false;
         }
 
+        private bool CheckAdminPermission(string feature)
+        {
+            if (currentUser.VaiTro != "Admin")
+            {
+                MessageBox.Show($"Bạn không có quyền {feature}!\nChỉ Admin mới có thể thực hiện chức năng này.",
+                    "Không có quyền", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            return true;
+        }
+
         #endregion
 
         private async void btnDatBan_Click_1(object sender, EventArgs e)
@@ -1345,6 +1473,41 @@ namespace WinFormsApp1
             if (currentSelectedBan != null)
             {
                 await SetBanBaoTri(currentSelectedBan);
+            }
+        }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            if (currentSelectedBan != null)
+            {
+                try
+                {
+                    var result = MessageBox.Show($"Bạn có chắc chắn hoàn tất bảo trì?",
+                        "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        // Tìm lại entity từ database để tránh tracking conflict
+                        var banCanSua = await dbContext.Bans.FirstOrDefaultAsync(b => b.ID == currentSelectedBan.ID && !b.IsDeleted);
+                        if (banCanSua != null)
+                        {
+                            banCanSua.TrangThai = 1; // hoàn tất bảo trì -> đổi trạng thái bàn sang trống người
+                            await dbContext.SaveChangesAsync();
+
+                            MessageBox.Show($"{banCanSua.TenBan} đã được hoàn tất bảo trì!",
+                                "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            // Refresh dữ liệu và xóa panel
+                            await RefreshBanData();
+                            pnChiTiet.Controls.Clear();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Lỗi khi cập nhật trạng thái bàn: {ex.Message}",
+                        "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }

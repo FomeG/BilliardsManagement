@@ -43,6 +43,7 @@
             button1 = new Button();
             btnBoChon = new Button();
             btnNewBan = new Button();
+            button2 = new Button();
             btnDeleteBan = new Button();
             btnSaveBan = new Button();
             txtGiaTheoGio = new TextBox();
@@ -91,7 +92,6 @@
             đồĂnThứcUốngToolStripMenuItem = new ToolStripMenuItem();
             thốngKêToolStripMenuItem = new ToolStripMenuItem();
             quảnLýTàiKhoảnToolStripMenuItem = new ToolStripMenuItem();
-            càiĐặtToolStripMenuItem = new ToolStripMenuItem();
             đăngXuấtToolStripMenuItem = new ToolStripMenuItem();
             pnHienThi = new Panel();
             panel2 = new Panel();
@@ -218,6 +218,7 @@
             tabPageBan.Controls.Add(button1);
             tabPageBan.Controls.Add(btnBoChon);
             tabPageBan.Controls.Add(btnNewBan);
+            tabPageBan.Controls.Add(button2);
             tabPageBan.Controls.Add(btnDeleteBan);
             tabPageBan.Controls.Add(btnSaveBan);
             tabPageBan.Controls.Add(txtGiaTheoGio);
@@ -279,6 +280,23 @@
             btnNewBan.Text = "Thêm mới";
             btnNewBan.UseVisualStyleBackColor = false;
             btnNewBan.Click += btnNewBan_Click;
+            // 
+            // button2
+            // 
+            button2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            button2.BackColor = Color.Yellow;
+            button2.Enabled = false;
+            button2.FlatAppearance.BorderColor = SystemColors.ActiveCaptionText;
+            button2.FlatStyle = FlatStyle.Flat;
+            button2.ForeColor = Color.Black;
+            button2.Location = new Point(353, 237);
+            button2.Name = "button2";
+            button2.Size = new Size(112, 25);
+            button2.TabIndex = 11;
+            button2.Text = "Hoàn tất bảo trì";
+            button2.UseVisualStyleBackColor = false;
+            button2.Visible = false;
+            button2.Click += button2_Click;
             // 
             // btnDeleteBan
             // 
@@ -360,6 +378,7 @@
             // 
             // txtBanID
             // 
+            txtBanID.Enabled = false;
             txtBanID.Location = new Point(40, 12);
             txtBanID.Name = "txtBanID";
             txtBanID.ReadOnly = true;
@@ -749,7 +768,7 @@
             // menuStrip1
             // 
             menuStrip1.BackColor = SystemColors.ActiveBorder;
-            menuStrip1.Items.AddRange(new ToolStripItem[] { trangChủToolStripMenuItem, đồĂnThứcUốngToolStripMenuItem, thốngKêToolStripMenuItem, quảnLýTàiKhoảnToolStripMenuItem, càiĐặtToolStripMenuItem, đăngXuấtToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { trangChủToolStripMenuItem, đồĂnThứcUốngToolStripMenuItem, thốngKêToolStripMenuItem, quảnLýTàiKhoảnToolStripMenuItem, đăngXuấtToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1007, 24);
@@ -779,12 +798,6 @@
             quảnLýTàiKhoảnToolStripMenuItem.Name = "quảnLýTàiKhoảnToolStripMenuItem";
             quảnLýTàiKhoảnToolStripMenuItem.Size = new Size(112, 20);
             quảnLýTàiKhoảnToolStripMenuItem.Text = "Quản lý tài khoản";
-            // 
-            // càiĐặtToolStripMenuItem
-            // 
-            càiĐặtToolStripMenuItem.Name = "càiĐặtToolStripMenuItem";
-            càiĐặtToolStripMenuItem.Size = new Size(56, 20);
-            càiĐặtToolStripMenuItem.Text = "Cài đặt";
             // 
             // đăngXuấtToolStripMenuItem
             // 
@@ -907,11 +920,11 @@
         private ToolStripMenuItem đồĂnThứcUốngToolStripMenuItem;
         private ToolStripMenuItem thốngKêToolStripMenuItem;
         private ToolStripMenuItem quảnLýTàiKhoảnToolStripMenuItem;
-        private ToolStripMenuItem càiĐặtToolStripMenuItem;
         private ToolStripMenuItem đăngXuấtToolStripMenuItem;
         private Button btnDatBan;
         private Button btnBaoTri;
         private Button button1;
         private Panel panel2;
+        private Button button2;
     }
 }
