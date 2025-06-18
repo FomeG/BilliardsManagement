@@ -2,37 +2,6 @@
 
 Ứng dụng WinForms để quản lý quán bida, bao gồm quản lý bàn chơi, khách hàng, phiên chơi, hóa đơn và các sản phẩm.
 
-## 🚀 Setup Nhanh
-
-### Cách 1: Sử dụng Script Tự Động (Khuyến nghị)
-
-```bash
-# Chạy script batch
-./setup.bat
-
-# Hoặc chạy script PowerShell
-./setup.ps1
-```
-
-### Cách 2: Setup Thủ Công
-
-```bash
-# 1. Restore dependencies
-dotnet restore WinFormsApp1.sln
-
-# 2. Tạo database
-sqlcmd -S MAY-02\SQLEXPRESS -E -Q "CREATE DATABASE BilliardsManagement_DB"
-
-# 3. Chạy migration
-cd Models
-dotnet ef database update --startup-project ../WinFormsApp1
-cd ..
-
-# 4. Build và chạy
-dotnet build WinFormsApp1.sln
-dotnet run --project WinFormsApp1/WinFormsApp1.csproj
-```
-
 ## 📋 Yêu Cầu Hệ Thống
 
 - **.NET 8.0 SDK**
