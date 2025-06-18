@@ -29,18 +29,18 @@
 Server=MAY-02\SQLEXPRESS;Database=BilliardsManagement_DB;Trusted_Connection=True;TrustServerCertificate=True
 ```
 
+Nên sửa lại connection string khi sử dụng
+
 ## 🎯 Tính Năng Chính
 
 - **Quản lý Bàn Bida**: Theo dõi trạng thái và loại bàn
 - **Quản lý Khách Hàng**: Thông tin khách hàng và nạp giờ chơi
-- **Quản lý Phiên Chơi**: Theo dõi thời gian chơi và tính tiền
-- **Quản lý Hóa Đơn**: Xuất hóa đơn và chi tiết sản phẩm
 - **Quản lý Sản Phẩm**: Đồ uống, thức ăn và các dịch vụ khác
 - **Quản lý Tài Khoản**: Phân quyền nhân viên và quản lý
 
 ## 📊 Cơ Sở Dữ Liệu
 
-### Các Entity Chính:
+### Các Model Chính:
 - **TaiKhoan**: Quản lý tài khoản nhân viên
 - **KhachHang**: Thông tin khách hàng
 - **Ban**: Thông tin bàn bida
