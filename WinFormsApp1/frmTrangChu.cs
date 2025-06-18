@@ -2,7 +2,6 @@
 using Models.HandleData;
 using Models.Models;
 using System.Data;
-using System.Linq;
 
 namespace WinFormsApp1
 {
@@ -22,7 +21,9 @@ namespace WinFormsApp1
             currentUser = user;
             dbContext = new DaDBContext();
             SetupUserInterface();
-            LoadDefaultContent();
+
+
+            TaiDulieuTrangChu();
 
             // Thiết lập timer cho check phiên chơi hết hạn
             SetupPhienChoiCheckTimer();
@@ -52,13 +53,13 @@ namespace WinFormsApp1
             {
                 lblUserRole.Text = "Vai trò: Quản trị viên";
                 // Bật các chức năng admin
-                EnableAdminFeatures();
+                BatChucNangAdmin();
             }
             else
             {
                 lblUserRole.Text = "Vai trò: Nhân viên";
                 // Tắt các chức năng admin
-                DisableAdminFeatures();
+                TatChucNangAdmin();
             }
 
             // Cập nhật thời gian
@@ -90,7 +91,7 @@ namespace WinFormsApp1
             }
         }
 
-        private void EnableAdminFeatures()
+        private void BatChucNangAdmin()
         {
             // Bật các chức năng dành cho admin
             // Menu items
@@ -115,7 +116,7 @@ namespace WinFormsApp1
             txtGiaTheoGio.ReadOnly = false;
         }
 
-        private void DisableAdminFeatures()
+        private void TatChucNangAdmin()
         {
             // Tắt các chức năng admin - chỉ để lại tính năng cơ bản cho staff
             // Ẩn menu items dành cho admin
@@ -158,13 +159,13 @@ namespace WinFormsApp1
             UpdateDateTime();
         }
 
-        private async void LoadDefaultContent()
+        private async void TaiDulieuTrangChu()
         {
             // Load danh sách bàn vào TableLayoutPanel
-            await LoadBanData();
+            await TaiDulieuBan();
 
             // Load danh sách thành viên vào DataGridView
-            await LoadThanhVienData();
+            await TaiDulieuKH();
 
             // Setup TabControl event để handle resize
             SetupTabControlEvents();
@@ -252,7 +253,7 @@ namespace WinFormsApp1
 
         #region Ban Management
 
-        private async Task LoadBanData()
+        private async Task TaiDulieuBan()
         {
             try
             {
@@ -523,7 +524,7 @@ namespace WinFormsApp1
         {
             // Phương thức để refresh lại dữ liệu bàn
             // Sử dụng context riêng để tránh conflict với UI thread
-            await LoadBanData();
+            await TaiDulieuBan();
         }
 
         private async void OnDatBanSuccess()
@@ -639,16 +640,15 @@ namespace WinFormsApp1
         {
             try
             {
-                await CheckExpiredPhienChoi();
+                await KiemTraPhienChoi();
             }
             catch (Exception ex)
             {
-                // Log lỗi nhưng không hiển thị MessageBox để tránh spam user
                 Console.WriteLine($"Lỗi khi check phiên chơi hết hạn: {ex.Message}");
             }
         }
 
-        private async Task CheckExpiredPhienChoi()
+        private async Task KiemTraPhienChoi()
         {
             try
             {
@@ -712,7 +712,7 @@ namespace WinFormsApp1
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Lỗi trong CheckExpiredPhienChoi: {ex.Message}");
+                Console.WriteLine($"Lỗi trong KiemTraPhienChoi: {ex.Message}");
             }
         }
 
@@ -780,7 +780,7 @@ namespace WinFormsApp1
 
         #region Thanh Vien Data Management
 
-        private async Task LoadThanhVienData()
+        private async Task TaiDulieuKH()
         {
             try
             {
@@ -790,7 +790,6 @@ namespace WinFormsApp1
                 {
                     var khachHangs = await loadContext.KhachHangs.OrderBy(k => k.ID).ToListAsync();
 
-                    // Update DataGridView with data
                     UpdateDataGridViewWithResults(khachHangs);
                 }
             }
@@ -1357,7 +1356,7 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            LoadDefaultContent();
+            TaiDulieuTrangChu();
         }
 
         #region Menu Navigation

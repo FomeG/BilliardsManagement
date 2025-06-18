@@ -215,31 +215,24 @@ namespace WinFormsApp1
             {
                 using (var context = new DaDBContext())
                 {
-                    // Tìm tài khoản trong database
                     var user = await context.TaiKhoans
                         .FirstOrDefaultAsync(t => t.TenDangNhap == username && t.MatKhau == password && t.TrangThai == true);
 
                     if (user != null)
                     {
-                        // Lưu thông tin đăng nhập nếu được chọn Remember Me
                         SaveCredentialsIfRemembered(username);
 
-                        // Đăng nhập thành công - lưu vào session
                         UserSession.Login(user);
                         MessageBox.Show($"Đăng nhập thành công! Xin chào {user.HoTen}", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        // Mở form chính và ẩn form đăng nhập
                         frmTrangChu mainForm = new frmTrangChu(user);
 
-                        // Đăng ký sự kiện khi MainForm đóng để hiển thị lại Form1
                         mainForm.FormClosed += (s, args) =>
                         {
                             this.Show();
                             this.WindowState = FormWindowState.Normal;
                             this.BringToFront();
-                            // Reset form đăng nhập
                             matkhau.Clear();
-                            // Chỉ xóa username nếu không ghi nhớ
                             if (!IsRememberMeChecked())
                             {
                                 ClearUsernameField();
@@ -252,7 +245,6 @@ namespace WinFormsApp1
                     }
                     else
                     {
-                        // Đăng nhập thất bại
                         MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         matkhau.Clear();
                         taikhoan.Focus();

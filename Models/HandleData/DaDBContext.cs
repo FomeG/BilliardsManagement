@@ -27,7 +27,7 @@ namespace Models.HandleData
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=MAY23\\SQLEXPRESS;Database=BilliardsManagement_DB;Trusted_Connection=True;TrustServerCertificate=True");
+                optionsBuilder.UseSqlServer("Server=NGHIA\\SQLEXPRESS;Database=BilliardsManagement_DB;Trusted_Connection=True;TrustServerCertificate=True");
             }
         }
 

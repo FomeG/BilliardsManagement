@@ -23,11 +23,10 @@ namespace WinFormsApp1
             onClose = onCloseCallback;
             dbContext = new DaDBContext();
 
-            // Add event handler for form closed
             this.FormClosed += frmThongTinDichVu_FormClosed;
 
             SetupForm();
-            _ = LoadPhienChoiData(); // Fire and forget cho constructor
+            _ = LoadPhienChoiData();
             SetupTimer();
         }
 
